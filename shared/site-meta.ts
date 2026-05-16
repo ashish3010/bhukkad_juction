@@ -1,21 +1,13 @@
+import { common } from "@/shared/data/common";
+
 /** Public site URL with no trailing slash — set in `.env` for correct Open Graph / Twitter cards. */
-export const SITE_NAME = "The Bhukkad Junction";
+export const SITE_NAME = common.site.name;
 
-export const SITE_TITLE = `${SITE_NAME} | Order food online`;
+export const SITE_TITLE = common.site.title;
 
-export const SITE_DESCRIPTION =
-  "Order authentic Bihar-style meals, street food, and combos from The Bhukkad Junction. Fresh from our kitchen — delivery in Gurgaon (Gurugram) and nearby areas. Cash on delivery available.";
+export const SITE_DESCRIPTION = common.site.description;
 
-export const SITE_KEYWORDS = [
-  "The Bhukkad Junction",
-  "food delivery Gurugram",
-  "food delivery Gurgaon",
-  "Bihari food delivery Gurugram",
-  "litti chokha online Gurugram",
-  "Indian street food Gurgaon",
-  "order food Gurugram",
-  "Khane ka junction",
-].join(", ");
+export const SITE_KEYWORDS = common.site.keywords;
 
 export const LOGO_PATH = "/images/logo.png";
 
@@ -35,12 +27,12 @@ export function restaurantJsonLd(): string {
     "@type": "Restaurant",
     name: SITE_NAME,
     description: SITE_DESCRIPTION,
-    servesCuisine: ["Indian", "Bihari"],
+    servesCuisine: common.site.jsonLdServesCuisine,
     image: imageAbs ?? LOGO_PATH,
     areaServed: {
       "@type": "City",
-      name: "Gurugram",
-      alternateName: "Gurgaon",
+      name: common.site.areaServedName,
+      alternateName: common.site.areaServedAlternateName,
     },
   };
   if (url) data.url = url;

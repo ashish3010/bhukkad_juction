@@ -2,6 +2,8 @@ import Link from "next/link";
 import { CheckoutStepper } from "@/features/checkout/components/CheckoutStepper";
 import { setDefaultAddress, type SavedAddressEntry } from "@/features/checkout/delivery-address-storage";
 import { Button } from "@/shared/components/ui/Button";
+import { common, replaceCopy } from "@/shared/data/common";
+import { SITE_NAME } from "@/shared/site-meta";
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -22,9 +24,10 @@ type Props = {
 };
 
 function kindTitle(e: SavedAddressEntry): string {
-  if (e.kind === "home") return "Home";
-  if (e.kind === "work") return "Work";
-  return e.customLabel ? `Other (${e.customLabel})` : "Other";
+  const c = common.checkout;
+  if (e.kind === "home") return c.addressKindHome;
+  if (e.kind === "work") return c.addressKindWork;
+  return e.customLabel ? replaceCopy(c.addressKindOtherWithLabel, { label: e.customLabel }) : c.addressKindOther;
 }
 
 function KindIcon({ kind }: { kind: SavedAddressEntry["kind"] }) {
@@ -48,7 +51,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
         >
           <IconArrowLeft className="h-4 w-4 shrink-0" />
         </Link>
-        <h1 className="text-center text-sm font-semibold text-[var(--bj-gold)]">Saved Addresses</h1>
+        <h1 className="text-center text-sm font-semibold text-[var(--bj-gold)]">{common.checkout.savedAddressesTitle}</h1>
         <span className="w-9 shrink-0" aria-hidden />
       </div>
 
@@ -64,7 +67,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
             <IconMapPin className="h-5 w-5" />
             <IconPlus className="absolute -right-0.5 -top-0.5 h-3 w-3" />
           </span>
-          Add New Address
+          {common.checkout.addNewAddress}
         </button>
 
         <div className="space-y-3">
@@ -88,7 +91,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
                   <span className="text-sm font-semibold text-[var(--bj-gold)]">{kindTitle(e)}</span>
                   {e.isDefault ? (
                     <span className="rounded bg-[var(--bj-gold-fill)]/25 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[var(--bj-gold)]">
-                      Default
+                      {common.checkout.defaultBadge}
                     </span>
                   ) : null}
                 </div>
@@ -101,7 +104,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
                   <button
                     type="button"
                     className="rounded-full p-2 text-[var(--bj-gold)] hover:bg-stone-100 dark:hover:bg-zinc-800"
-                    aria-label={`Edit ${kindTitle(e)}`}
+                    aria-label={replaceCopy(common.aria.editAddressKind, { kind: kindTitle(e) })}
                     onClick={(ev) => {
                       ev.stopPropagation();
                       onEdit(e);
@@ -122,11 +125,11 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
       <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-stone-200/80 bg-[var(--bj-bg)]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md dark:border-zinc-800/80">
         <div className="mx-auto w-full max-w-md">
           <Button className="w-full justify-center py-3.5 text-base" onClick={onPlaceOrder}>
-            Place order
+            {common.checkout.placeOrder}
             <IconArrowRight className="h-5 w-5" />
           </Button>
           <p className="mt-3 text-center text-[10px] leading-snug text-stone-500 dark:text-zinc-500">
-            Default address is used for delivery · The Bhukkad Junction
+            {replaceCopy(common.checkout.defaultDeliveryFootnote, { siteName: SITE_NAME })}
           </p>
         </div>
       </div>

@@ -1,0 +1,131 @@
+{
+  "site": {
+    "name": "The Bhukkad Junction",
+    "title": "The Bhukkad Junction | Order food online",
+    "description": "Order authentic Bihar-style meals, street food, and combos from The Bhukkad Junction. Fresh from our kitchen — delivery in Gurgaon (Gurugram) and nearby areas. Cash on delivery available.",
+    "keywords": "The Bhukkad Junction, food delivery Gurugram, food delivery Gurgaon, Bihari food delivery Gurugram, litti chokha online Gurugram, Indian street food Gurgaon, order food Gurugram, Khane ka junction",
+    "jsonLdServesCuisine": ["Indian", "Bihari"],
+    "areaServedName": "Gurugram",
+    "areaServedAlternateName": "Gurgaon"
+  },
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "orders": "Orders",
+    "cart": "Cart",
+    "drawerMenuLabel": "Menu",
+    "appearance": "Appearance",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "aria": {
+    "closeMenu": "Close menu",
+    "close": "Close",
+    "mainMenu": "Main menu",
+    "openMenu": "Open menu",
+    "homeLink": "{siteName} — Home",
+    "cart": "Cart",
+    "cartWithCount": "Cart, {count} items",
+    "theme": "Theme",
+    "quantity": "Quantity",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "removeFromCart": "Remove {name} from cart",
+    "quantityForProduct": "Quantity for {name}",
+    "editAddressKind": "Edit {kind}"
+  },
+  "home": {
+    "categoriesHeading": "Categories",
+    "promoHero": {
+      "imageAlt": "Litti Chokha",
+      "title": "Authentic Litti Chokha",
+      "subtitle": "Home Food, Hygienic & Comfort Food, Made with Love",
+      "orderNow": "Order Now"
+    }
+  },
+  "productCard": {
+    "addToCart": "Add to cart"
+  },
+  "cart": {
+    "yourSelection": "Your Selection",
+    "emptyMessage": "Your cart is empty. Add items from the menu on Home.",
+    "eachSuffix": " each",
+    "total": "Total",
+    "continueToDelivery": "Continue to delivery",
+    "backToMenu": "Back to menu"
+  },
+  "checkout": {
+    "stepCart": "Cart",
+    "stepDelivery": "Delivery",
+    "receiverInfo": "Receiver Information",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "contactNumber": "Contact Number",
+    "phonePlaceholder": "9876543210",
+    "phoneHint": "Digits only — 10-digit mobile number.",
+    "phoneInvalid": "Enter a valid 10-digit mobile number.",
+    "deliveryAddress": "Delivery Address",
+    "deliveryAddressSr": "Delivery address",
+    "addressPlaceholder": "Flat / House No., Street Name, Landmark, City",
+    "addressKindHome": "Home",
+    "addressKindWork": "Work",
+    "addressKindOther": "Other",
+    "addressKindOtherWithLabel": "Other ({label})",
+    "otherLabel": "Other label (optional)",
+    "otherLabelPlaceholder": "e.g. Gym, parents home",
+    "saveAndPlaceOrder": "Save & place order",
+    "savedOnDeviceNote": "Saved on this device · {siteName}",
+    "savedAddressesTitle": "Saved Addresses",
+    "backToCart": "Back to cart",
+    "savedAddressesBack": "Saved addresses",
+    "addNewAddress": "Add New Address",
+    "defaultBadge": "Default",
+    "placeOrder": "Place order",
+    "defaultDeliveryFootnote": "Default address is used for delivery · {siteName}"
+  },
+  "orderPlaced": {
+    "title": "Order Placed Successfully!",
+    "subtitle": "Your delicious meal is being prepared with love.",
+    "orderIdLabel": "Order ID",
+    "deliveryTo": "Delivery to",
+    "orderSummary": "Order summary",
+    "totalAmount": "Total Amount",
+    "backToHome": "Back to Home"
+  },
+  "orderPlacing": {
+    "loadingPrimary": "Placing your order…",
+    "loadingSecondary": "Hang tight — almost there",
+    "confirmedTitle": "Order Confirmed 🎉",
+    "preparing": "We're preparing your food",
+    "cod": "Cash on Delivery"
+  },
+  "orders": {
+    "backToMenu": "Back to menu",
+    "title": "My Orders",
+    "subtitle": "Up to your last 20 orders on this device.",
+    "emptyTitle": "No orders yet",
+    "emptyBody": "Place an order from the menu — it will show up here.",
+    "browseMenu": "Browse menu",
+    "historyHeading": "Order history",
+    "delivered": "Delivered",
+    "reorder": "Re-order"
+  },
+  "telegram": {
+    "lineItem": "• {name} × {qty} — ₹{lineTotal}",
+    "newOrder": "New order {orderId}",
+    "totalLine": "Total: ₹{total}",
+    "customer": "Customer: {name}",
+    "phone": "Phone: {phone}",
+    "deliverTo": "Deliver to: {title}"
+  },
+  "landing": {
+    "heroImageAlt": "Restaurant hero",
+    "liveKitchen": "Live Kitchen",
+    "title": "The Bhukkad Junction",
+    "tagline": "Khane ka Asli Junction!",
+    "description": "Experience the authentic flavors of Bihar, delivered from our kitchen to your doorstep in Gurgaon (Gurugram).",
+    "logIn": "Log In",
+    "alreadyMember": "Already a member?",
+    "getStarted": "Get Started"
+  }
+}

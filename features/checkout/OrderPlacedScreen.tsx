@@ -13,6 +13,7 @@ import {
   IconMapPin,
   IconReceipt,
 } from "@/shared/components/icons";
+import { common } from "@/shared/data/common";
 
 const card =
   "rounded-2xl border border-stone-200/90 bg-[var(--bj-card)] p-4 shadow-sm dark:border-zinc-800/90 dark:shadow-none";
@@ -56,9 +57,9 @@ export function OrderPlacedScreen() {
         <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-[var(--bj-gold-fill)] shadow-[0_0_32px_rgba(240,180,41,0.45)] ring-4 ring-[var(--bj-gold-fill)]/30">
           <IconCheck className="h-10 w-10 text-[#1a1203]" />
         </div>
-        <h1 className="mt-6 text-center text-xl font-bold text-[var(--bj-gold)]">Order Placed Successfully!</h1>
+        <h1 className="mt-6 text-center text-xl font-bold text-[var(--bj-gold)]">{common.orderPlaced.title}</h1>
         <p className="mt-2 max-w-xs text-center text-sm leading-relaxed text-stone-600 dark:text-zinc-400">
-          Your delicious meal is being prepared with love.
+          {common.orderPlaced.subtitle}
         </p>
       </div>
 
@@ -68,7 +69,7 @@ export function OrderPlacedScreen() {
             <IconHash className="h-4 w-4" />
           </span>
           <div>
-            <p className="text-xs text-stone-500 dark:text-zinc-500">Order ID</p>
+            <p className="text-xs text-stone-500 dark:text-zinc-500">{common.orderPlaced.orderIdLabel}</p>
             <p className="text-sm font-bold text-stone-900 dark:text-zinc-100">#{snap.orderId}</p>
           </div>
         </div>
@@ -80,7 +81,7 @@ export function OrderPlacedScreen() {
         </div>
         <div className="relative flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-[var(--bj-gold)]">
           <IconMapPin className="h-4 w-4" />
-          Delivery to
+          {common.orderPlaced.deliveryTo}
         </div>
         <p className="relative mt-3 text-base font-semibold text-stone-900 dark:text-zinc-100">{snap.deliveryTitle}</p>
         <p className="relative mt-1 text-sm leading-relaxed text-stone-600 dark:text-zinc-400">{snap.deliveryAddress}</p>
@@ -89,7 +90,7 @@ export function OrderPlacedScreen() {
       <div className={card}>
         <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-[var(--bj-gold)]">
           <IconReceipt className="h-4 w-4" />
-          Order summary
+          {common.orderPlaced.orderSummary}
         </div>
         <ul className="space-y-2 border-b border-stone-200 pb-3 text-sm dark:border-zinc-700">
           {snap.lines.map((l, i) => (
@@ -102,7 +103,7 @@ export function OrderPlacedScreen() {
           ))}
         </ul>
         <div className="mt-3 flex items-center justify-between">
-          <span className="text-sm font-medium text-stone-800 dark:text-zinc-300">Total Amount</span>
+          <span className="text-sm font-medium text-stone-800 dark:text-zinc-300">{common.orderPlaced.totalAmount}</span>
           <span className="text-lg font-bold text-[var(--bj-gold)]">₹{snap.total}</span>
         </div>
       </div>
@@ -113,7 +114,7 @@ export function OrderPlacedScreen() {
           onClick={onBackHome}
           className="flex w-full items-center justify-center rounded-full border border-stone-300 bg-white py-3.5 text-sm font-semibold text-stone-800 shadow-sm transition hover:bg-stone-50 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
         >
-          Back to Home
+          {common.orderPlaced.backToHome}
         </Link>
       </div>
     </div>

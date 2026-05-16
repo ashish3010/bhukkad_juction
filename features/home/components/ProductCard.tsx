@@ -3,6 +3,7 @@ import { memo, useCallback } from "react";
 import { Button } from "@/shared/components/ui/Button";
 import { IconMinus, IconPlus } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
+import { common } from "@/shared/data/common";
 import { formatProductPrice } from "@/shared/data/menu";
 import type { Product } from "@/shared/types/food";
 
@@ -53,18 +54,18 @@ export const ProductCard = memo(function ProductCard({ product }: Props) {
             onClick={onAdd}
           >
             <IconPlus className="h-3.5 w-3.5" />
-            Add to cart
+            {common.productCard.addToCart}
           </Button>
         ) : (
           <div
             className="inline-flex w-fit max-w-full items-center gap-0 rounded-full bg-stone-100 p-0.5 ring-1 ring-stone-200 dark:bg-zinc-800 dark:ring-zinc-700"
             role="group"
-            aria-label="Quantity"
+            aria-label={common.aria.quantity}
           >
             <button
               type="button"
               className={`${stepBtn} bg-stone-200 text-stone-800 hover:bg-stone-300 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600`}
-              aria-label="Decrease quantity"
+              aria-label={common.aria.decreaseQuantity}
               onClick={onDec}
             >
               <IconMinus className="h-3.5 w-3.5 shrink-0" />
@@ -75,7 +76,7 @@ export const ProductCard = memo(function ProductCard({ product }: Props) {
             <button
               type="button"
               className={`${stepBtn} bg-[var(--bj-gold-fill)] text-[#1a1203] shadow-[0_2px_6px_rgba(240,180,41,0.35)] hover:brightness-105`}
-              aria-label="Increase quantity"
+              aria-label={common.aria.increaseQuantity}
               onClick={onInc}
             >
               <IconPlus className="h-3.5 w-3.5 shrink-0" />

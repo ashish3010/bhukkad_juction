@@ -5,6 +5,7 @@ import { useCart } from "@/features/cart/cart-store";
 import { PriceSummary } from "@/features/checkout/components/PriceSummary";
 import { SelectionList } from "@/features/checkout/components/SelectionList";
 import { IconArrowLeft, IconArrowRight } from "@/shared/components/icons";
+import { common } from "@/shared/data/common";
 import { getProductById } from "@/shared/data/menu";
 
 export function OrderSummaryScreen() {
@@ -25,7 +26,7 @@ export function OrderSummaryScreen() {
           className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 transition hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100"
         >
           <IconArrowLeft className="h-4 w-4 shrink-0" />
-          Back to menu
+          {common.cart.backToMenu}
         </Link>
       </div>
       <CheckoutStepper current={1} />
@@ -38,7 +39,7 @@ export function OrderSummaryScreen() {
               href="/checkout/delivery"
               className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--bj-gold-fill)] py-3.5 text-sm font-semibold text-[#1a1203] shadow-[0_8px_24px_rgba(240,180,41,0.35)] transition hover:brightness-105 active:scale-[0.98]"
             >
-              Continue to delivery
+              {common.cart.continueToDelivery}
               <IconArrowRight className="h-5 w-5 shrink-0" />
             </Link>
           </div>

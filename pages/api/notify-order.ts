@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { OrderPlacedLine, OrderPlacedSnapshot } from "@/features/checkout/order-placed-snapshot";
 import { sendTelegramMessage } from "@/lib/telegram";
+import { common, replaceCopy } from "@/shared/data/common";
 
 const MAX_LINES = 80;
 const MAX_STR = 2000;
@@ -47,19 +48,26 @@ function parseSnapshot(body: unknown): OrderPlacedSnapshot | null {
 }
 
 function formatOrderMessage(s: OrderPlacedSnapshot): string {
+  const t = common.telegram;
   const lineText = s.lines
-    .map((l) => `• ${l.name} × ${l.quantity} — ₹${l.lineTotal}`)
+    .map((l) =>
+      replaceCopy(t.lineItem, {
+        name: l.name,
+        qty: l.quantity,
+        lineTotal: l.lineTotal,
+      }),
+    )
     .join("\n");
   return [
-    `New order ${s.orderId}`,
-    `Total: ₹${s.total}`,
+    replaceCopy(t.newOrder, { orderId: s.orderId }),
+    replaceCopy(t.totalLine, { total: s.total }),
     "",
     lineText,
     "",
-    `Customer: ${s.customerName}`,
-    `Phone: ${s.customerPhone}`,
+    replaceCopy(t.customer, { name: s.customerName }),
+    replaceCopy(t.phone, { phone: s.customerPhone }),
     "",
-    `Deliver to: ${s.deliveryTitle}`,
+    replaceCopy(t.deliverTo, { title: s.deliveryTitle }),
     s.deliveryAddress,
   ].join("\n");
 }

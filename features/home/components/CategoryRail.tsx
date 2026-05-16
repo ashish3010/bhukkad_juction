@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { memo } from "react";
+import { common } from "@/shared/data/common";
 import type { Category } from "@/shared/types/food";
 
 type Props = { categories: Category[] };
@@ -8,7 +9,7 @@ export const CategoryRail = memo(function CategoryRail({ categories }: Props) {
   return (
     <section id="categories" className="pb-6">
       <div className="mb-3 px-4">
-        <h3 className="text-base font-semibold text-stone-900 dark:text-zinc-100">Categories</h3>
+        <h3 className="text-base font-semibold text-stone-900 dark:text-zinc-100">{common.home.categoriesHeading}</h3>
       </div>
       <div className="flex gap-4 overflow-x-auto px-4 pb-1 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {categories.map((c) => (

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { IconBag, IconMenu } from "@/shared/components/icons";
 import { NavDrawer } from "@/features/layout/components/NavDrawer";
 import { useCartStore } from "@/features/cart/cart-store";
+import { common, replaceCopy } from "@/shared/data/common";
 import { SITE_NAME } from "@/shared/site-meta";
 
 export function AppHeader() {
@@ -15,7 +16,7 @@ export function AppHeader() {
         <button
           type="button"
           className="rounded-full p-2 text-stone-700 hover:bg-stone-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/80"
-          aria-label="Open menu"
+          aria-label={common.aria.openMenu}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen(true)}
         >
@@ -24,7 +25,7 @@ export function AppHeader() {
         <Link
           href="/home"
           className="flex min-w-0 flex-1 items-center justify-center px-2"
-          aria-label={`${SITE_NAME} — Home`}
+          aria-label={replaceCopy(common.aria.homeLink, { siteName: SITE_NAME })}
         >
           <span className="truncate text-center text-sm font-semibold tracking-tight text-[var(--bj-gold)]">
             {SITE_NAME}
@@ -33,7 +34,11 @@ export function AppHeader() {
         <Link
           href="/order-summary"
           className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-stone-100 text-stone-700 hover:border-[var(--bj-gold)]/35 hover:text-[var(--bj-gold)] dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:border-[var(--bj-gold)]/40"
-          aria-label={`Cart${totalCount > 0 ? `, ${totalCount} items` : ""}`}
+          aria-label={
+            totalCount > 0
+              ? replaceCopy(common.aria.cartWithCount, { count: totalCount })
+              : common.aria.cart
+          }
         >
           <IconBag className="h-4 w-4" />
           {totalCount > 0 ? (

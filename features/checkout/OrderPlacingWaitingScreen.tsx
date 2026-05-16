@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useCartStore } from "@/features/cart/cart-store";
 import { readOrderPlacedSnapshot } from "@/features/checkout/order-placed-snapshot";
+import { common } from "@/shared/data/common";
 
 const LOTTIE_SRC = "/animation/Success.lottie";
 
@@ -62,16 +63,12 @@ export function OrderPlacingWaitingScreen() {
       </div>
 
       <p className="mt-8 text-center text-lg font-semibold text-stone-900 dark:text-zinc-100">
-        Order Confirmed 🎉
+        {common.orderPlacing.confirmedTitle}
       </p>
 
-      <p className="mt-2 text-center text-sm text-stone-600 dark:text-zinc-400">
-        We’re preparing your food
-      </p>
+      <p className="mt-2 text-center text-sm text-stone-600 dark:text-zinc-400">{common.orderPlacing.preparing}</p>
 
-      <p className="mt-5 text-sm font-medium text-[var(--bj-gold)]">
-        Cash on Delivery
-      </p>
+      <p className="mt-5 text-sm font-medium text-[var(--bj-gold)]">{common.orderPlacing.cod}</p>
     </div>
   );
 }

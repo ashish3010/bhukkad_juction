@@ -1,4 +1,5 @@
 import { Card } from "@/shared/components/ui/Card";
+import { common } from "@/shared/data/common";
 
 type Props = {
   total: number;
@@ -9,7 +10,7 @@ export function PriceSummary({ total }: Props) {
     <section className="px-4 pt-6">
       <Card className="p-4">
         <div className="flex justify-between text-base font-bold text-[var(--bj-gold)]">
-          <span>Total</span>
+          <span>{common.cart.total}</span>
           <span>₹{total}</span>
         </div>
       </Card>

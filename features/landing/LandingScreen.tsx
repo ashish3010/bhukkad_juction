@@ -3,14 +3,16 @@ import Link from "next/link";
 import { BrandMark } from "@/features/landing/components/BrandMark";
 import { GetStartedButton } from "@/features/landing/components/GetStartedButton";
 import { LiveKitchenBadge } from "@/features/landing/components/LiveKitchenBadge";
+import { common } from "@/shared/data/common";
 
 export function LandingScreen() {
+  const l = common.landing;
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col overflow-hidden bg-[var(--bj-bg)] text-stone-900 dark:text-zinc-100">
       <div className="relative h-[38vh] min-h-[200px] w-full shrink-0">
         <Image
           src="/images/landing-hero.png"
-          alt=""
+          alt={l.heroImageAlt}
           fill
           priority
           className="object-cover object-center"
@@ -24,21 +26,17 @@ export function LandingScreen() {
         <BrandMark />
 
         <div className="mt-6 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--bj-gold)] sm:text-4xl">
-            The Bhukkad Junction
-          </h1>
-          <p className="mt-2 text-xl font-bold text-[var(--bj-gold)]">Khane ka Asli Junction!</p>
-          <p className="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-stone-600 dark:text-zinc-400">
-            Experience the authentic flavors of Bihar, delivered from our kitchen to your doorstep in Gurgaon (Gurugram).
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--bj-gold)] sm:text-4xl">{l.title}</h1>
+          <p className="mt-2 text-xl font-bold text-[var(--bj-gold)]">{l.tagline}</p>
+          <p className="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-stone-600 dark:text-zinc-400">{l.description}</p>
         </div>
 
         <div className="mt-auto w-full space-y-5 pt-12">
           <GetStartedButton />
           <p className="text-center text-sm text-stone-600 dark:text-zinc-400">
-            Already a member?{" "}
+            {l.alreadyMember}{" "}
             <Link href="/home" className="font-semibold text-[var(--bj-gold)] hover:underline">
-              Log In
+              {l.logIn}
             </Link>
           </p>
         </div>

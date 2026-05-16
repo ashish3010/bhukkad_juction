@@ -1,5 +1,6 @@
 import type { Category, Product } from "@/shared/types/food";
-import menuData from "./menu.json";
+/** Source of truth: `public/static/menu.json` (also served at `/static/menu.json`). Bundled at build time. */
+import menuData from "../../public/static/menu.json";
 
 type MenuJson = {
   categories: Category[];

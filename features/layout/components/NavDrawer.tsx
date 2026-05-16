@@ -4,17 +4,18 @@ import { AppLogo } from "@/features/layout/components/AppLogo";
 import { IconBag, IconGrid, IconHome, IconReceipt, IconX } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
 import { useTheme } from "@/features/theme/theme-context";
+import { common } from "@/shared/data/common";
 
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 
-const navItems = [
-  { key: "home", href: "/home", label: "Home", icon: IconHome },
-  { key: "categories", href: "/home#categories", label: "Categories", icon: IconGrid },
-  { key: "orders", href: "/orders", label: "Orders", icon: IconReceipt },
-  { key: "cart", href: "/order-summary", label: "Cart", icon: IconBag, badge: true as const },
+const navConfig = [
+  { key: "home", href: "/home", labelKey: "home" as const, icon: IconHome },
+  { key: "categories", href: "/home#categories", labelKey: "categories" as const, icon: IconGrid },
+  { key: "orders", href: "/orders", labelKey: "orders" as const, icon: IconReceipt },
+  { key: "cart", href: "/order-summary", labelKey: "cart" as const, icon: IconBag, badge: true as const },
 ];
 
 function isActiveItem(key: string, pathname: string, asPath: string): boolean {
@@ -38,30 +39,31 @@ export function NavDrawer({ open, onClose }: Props) {
       <button
         type="button"
         className="absolute inset-0 bg-stone-900/25 backdrop-blur-sm dark:bg-black/55"
-        aria-label="Close menu"
+        aria-label={common.aria.closeMenu}
         onClick={onClose}
       />
       <nav
         className="absolute left-0 top-0 flex h-full w-[min(88%,280px)] flex-col bg-white py-4 shadow-2xl ring-1 ring-stone-200 dark:bg-zinc-950 dark:ring-zinc-800"
-        aria-label="Main menu"
+        aria-label={common.aria.mainMenu}
       >
         <div className="flex items-center justify-between border-b border-stone-300 px-4 pb-4 dark:border-zinc-700">
           <div className="flex min-w-0 items-center gap-2">
             <AppLogo width={32} decorative />
-            <span className="text-sm font-semibold text-stone-900 dark:text-zinc-100">Menu</span>
+            <span className="text-sm font-semibold text-stone-900 dark:text-zinc-100">{common.nav.drawerMenuLabel}</span>
           </div>
           <button
             type="button"
             className="rounded-full p-2 text-stone-600 hover:bg-stone-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            aria-label="Close"
+            aria-label={common.aria.close}
             onClick={onClose}
           >
             <IconX className="h-5 w-5" />
           </button>
         </div>
         <ul className="flex flex-1 flex-col gap-1 overflow-y-auto px-2 pt-4">
-          {navItems.map(({ key, href, label, icon: Icon, badge }) => {
+          {navConfig.map(({ key, href, labelKey, icon: Icon, badge }) => {
             const active = isActiveItem(key, pathname, asPath);
+            const label = common.nav[labelKey];
             return (
               <li key={key}>
                 <Link
@@ -95,8 +97,8 @@ export function NavDrawer({ open, onClose }: Props) {
         </ul>
 
         <div className="mt-auto border-t border-stone-300 px-4 pb-1 pt-4 dark:border-zinc-700">
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500 dark:text-zinc-500">Appearance</p>
-          <div className="mt-2 grid grid-cols-2 gap-2" role="group" aria-label="Theme">
+          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500 dark:text-zinc-500">{common.nav.appearance}</p>
+          <div className="mt-2 grid grid-cols-2 gap-2" role="group" aria-label={common.aria.theme}>
             <button
               type="button"
               onClick={() => setTheme("light")}
@@ -106,7 +108,7 @@ export function NavDrawer({ open, onClose }: Props) {
                   : "border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
               }`}
             >
-              Light
+              {common.nav.light}
             </button>
             <button
               type="button"
@@ -117,7 +119,7 @@ export function NavDrawer({ open, onClose }: Props) {
                   : "border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
               }`}
             >
-              Dark
+              {common.nav.dark}
             </button>
           </div>
         </div>

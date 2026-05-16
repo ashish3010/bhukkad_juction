@@ -9,6 +9,8 @@ import {
   upsertAddressFromForm,
 } from "@/features/checkout/delivery-address-storage";
 import { Button } from "@/shared/components/ui/Button";
+import { common, replaceCopy } from "@/shared/data/common";
+import { SITE_NAME } from "@/shared/site-meta";
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -40,6 +42,7 @@ type Props = {
 export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel, onSaved }: Props) {
   const router = useRouter();
   const { lines } = useCart();
+  const c = common.checkout;
   const [fullName, setFullName] = useState(() => editingEntry?.fullName ?? "");
   const [phone, setPhone] = useState(() => normalizePhoneDigits(editingEntry?.phone ?? ""));
   const [address, setAddress] = useState(() => editingEntry?.address ?? "");
@@ -87,7 +90,7 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
             className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 transition hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             <IconArrowLeft className="h-4 w-4 shrink-0" />
-            Saved addresses
+            {c.savedAddressesBack}
           </button>
         ) : (
           <Link
@@ -95,7 +98,7 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
             className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 transition hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             <IconArrowLeft className="h-4 w-4 shrink-0" />
-            Back to cart
+            {c.backToCart}
           </Link>
         )}
       </div>
@@ -104,17 +107,17 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
 
       <div className="mt-6 space-y-8 px-4">
         <section className="space-y-4">
-          <h2 className="text-lg font-bold text-[var(--bj-gold)]">Receiver Information</h2>
+          <h2 className="text-lg font-bold text-[var(--bj-gold)]">{c.receiverInfo}</h2>
           <div className="space-y-1.5">
             <label className="block text-xs font-medium text-stone-500 dark:text-zinc-400" htmlFor="checkout-full-name">
-              Full Name
+              {c.fullName}
             </label>
             <div className={inputShell}>
               <IconIdCard className="mt-0.5 h-5 w-5 shrink-0 text-stone-400 dark:text-zinc-500" />
               <input
                 id="checkout-full-name"
                 className="min-w-0 flex-1 bg-transparent text-stone-900 outline-none placeholder:text-stone-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-                placeholder="Enter your full name"
+                placeholder={c.fullNamePlaceholder}
                 autoComplete="name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -123,7 +126,7 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
           </div>
           <div className="space-y-1.5">
             <label className="block text-xs font-medium text-stone-500 dark:text-zinc-400" htmlFor="checkout-phone">
-              Contact Number
+              {c.contactNumber}
             </label>
             <div className={inputShell}>
               <IconPhone className="mt-0.5 h-5 w-5 shrink-0 text-stone-400 dark:text-zinc-500" />
@@ -133,30 +136,30 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
                 inputMode="numeric"
                 autoComplete="tel"
                 className="min-w-0 flex-1 bg-transparent text-stone-900 outline-none placeholder:text-stone-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-                placeholder="9876543210"
+                placeholder={c.phonePlaceholder}
                 value={phone}
                 onChange={(e) => setPhone(normalizePhoneDigits(e.target.value))}
               />
             </div>
-            <p className="text-xs text-stone-500 dark:text-zinc-500">Digits only — 10-digit mobile number.</p>
+            <p className="text-xs text-stone-500 dark:text-zinc-500">{c.phoneHint}</p>
             {phoneInvalid ? (
-              <p className="text-xs text-[var(--bj-danger)]">Enter a valid 10-digit mobile number.</p>
+              <p className="text-xs text-[var(--bj-danger)]">{c.phoneInvalid}</p>
             ) : null}
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-lg font-bold text-[var(--bj-gold)]">Delivery Address</h2>
+          <h2 className="text-lg font-bold text-[var(--bj-gold)]">{c.deliveryAddress}</h2>
           <div className="space-y-1.5">
             <label className="sr-only" htmlFor="checkout-address">
-              Delivery address
+              {c.deliveryAddressSr}
             </label>
             <div className={`${inputShell} items-start`}>
               <IconMapPin className="mt-0.5 h-5 w-5 shrink-0 text-stone-400 dark:text-zinc-500" />
               <textarea
                 id="checkout-address"
                 className="min-h-[100px] min-w-0 flex-1 resize-y bg-transparent text-stone-900 outline-none placeholder:text-stone-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-                placeholder="Flat / House No., Street Name, Landmark, City"
+                placeholder={c.addressPlaceholder}
                 rows={4}
                 autoComplete="street-address"
                 value={address}
@@ -168,9 +171,9 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
           <div className="flex flex-wrap gap-2">
             {(
               [
-                { id: "home" as const, label: "Home", Icon: IconHome },
-                { id: "work" as const, label: "Work", Icon: IconBriefcase },
-                { id: "other" as const, label: "Other", Icon: IconMap },
+                { id: "home" as const, label: c.addressKindHome, Icon: IconHome },
+                { id: "work" as const, label: c.addressKindWork, Icon: IconBriefcase },
+                { id: "other" as const, label: c.addressKindOther, Icon: IconMap },
               ] as const
             ).map(({ id, label, Icon }) => {
               const selected = addressKind === id;
@@ -195,12 +198,12 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
           {addressKind === "other" ? (
             <div className="space-y-1.5">
               <label className="block text-xs font-medium text-stone-500 dark:text-zinc-400" htmlFor="checkout-other-label">
-                Other label (optional)
+                {c.otherLabel}
               </label>
               <input
                 id="checkout-other-label"
                 className="w-full rounded-2xl border border-stone-200 bg-white px-3 py-2.5 text-sm text-stone-900 shadow-sm outline-none placeholder:text-stone-400 focus:border-[var(--bj-gold)]/50 focus:ring-1 focus:ring-[var(--bj-gold-fill)]/30 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
-                placeholder="e.g. Gym, parents home"
+                placeholder={c.otherLabelPlaceholder}
                 value={otherLabel}
                 onChange={(e) => setOtherLabel(e.target.value)}
               />
@@ -216,11 +219,11 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
             disabled={!canSave}
             onClick={onSaveAddress}
           >
-            Save & place order
+            {c.saveAndPlaceOrder}
             <IconArrowRight className="h-5 w-5" />
           </Button>
           <p className="mt-3 text-center text-[10px] leading-snug text-stone-500 dark:text-zinc-500">
-            Saved on this device · The Bhukkad Junction
+            {replaceCopy(c.savedOnDeviceNote, { siteName: SITE_NAME })}
           </p>
         </div>
       </div>

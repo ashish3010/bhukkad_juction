@@ -1,11 +1,7 @@
 import { IconCheck } from "@/shared/components/icons";
+import { common } from "@/shared/data/common";
 
 export type CheckoutStep = 1 | 2;
-
-const STEPS: { step: CheckoutStep; label: string }[] = [
-  { step: 1, label: "Cart" },
-  { step: 2, label: "Delivery" },
-];
 
 type Props = { current: CheckoutStep };
 
@@ -50,7 +46,11 @@ function StepLabel({
 }
 
 export function CheckoutStepper({ current }: Props) {
-  const [first, second] = STEPS;
+  const steps: { step: CheckoutStep; label: string }[] = [
+    { step: 1, label: common.checkout.stepCart },
+    { step: 2, label: common.checkout.stepDelivery },
+  ];
+  const [first, second] = steps;
 
   return (
     <div className="flex justify-center px-4 pb-1 pt-5">

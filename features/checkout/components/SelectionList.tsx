@@ -3,6 +3,7 @@ import { memo, useCallback } from "react";
 import { Card } from "@/shared/components/ui/Card";
 import { IconMinus, IconPlus, IconTrash } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
+import { common, replaceCopy } from "@/shared/data/common";
 import { formatProductPrice, getProductById } from "@/shared/data/menu";
 import type { CartLine, Product } from "@/shared/types/food";
 
@@ -37,17 +38,20 @@ const SelectionLineRow = memo(function SelectionLineRow({ line, product }: LineR
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <p className="font-semibold leading-snug text-stone-900 dark:text-zinc-100">{product.name}</p>
-        <p className="text-xs text-stone-500 dark:text-zinc-400">{formatProductPrice(product)} each</p>
+        <p className="text-xs text-stone-500 dark:text-zinc-400">
+          {formatProductPrice(product)}
+          {common.cart.eachSuffix}
+        </p>
         <div className="inline-flex w-fit max-w-full items-center gap-1">
           <div
             className="inline-flex items-center gap-0 rounded-full bg-stone-100 p-0.5 ring-1 ring-stone-200 dark:bg-zinc-800 dark:ring-zinc-700"
             role="group"
-            aria-label={`Quantity for ${product.name}`}
+            aria-label={replaceCopy(common.aria.quantityForProduct, { name: product.name })}
           >
             <button
               type="button"
               className={`${stepBtn} bg-stone-200 text-stone-800 hover:bg-stone-300 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600`}
-              aria-label="Decrease quantity"
+              aria-label={common.aria.decreaseQuantity}
               onClick={onDec}
             >
               <IconMinus className="h-3.5 w-3.5 shrink-0" />
@@ -58,7 +62,7 @@ const SelectionLineRow = memo(function SelectionLineRow({ line, product }: LineR
             <button
               type="button"
               className={`${stepBtn} bg-[var(--bj-gold-fill)] text-[#1a1203] shadow-[0_2px_6px_rgba(240,180,41,0.35)] hover:brightness-105`}
-              aria-label="Increase quantity"
+              aria-label={common.aria.increaseQuantity}
               onClick={onInc}
             >
               <IconPlus className="h-3.5 w-3.5 shrink-0" />
@@ -67,7 +71,7 @@ const SelectionLineRow = memo(function SelectionLineRow({ line, product }: LineR
           <button
             type="button"
             className={deleteBtn}
-            aria-label={`Remove ${product.name} from cart`}
+            aria-label={replaceCopy(common.aria.removeFromCart, { name: product.name })}
             onClick={onRemove}
           >
             <IconTrash className="h-4 w-4 shrink-0" />
@@ -85,9 +89,9 @@ export function SelectionList() {
   if (lines.length === 0) {
     return (
       <section className="space-y-3 px-4">
-        <h2 className="text-sm font-bold text-[var(--bj-gold)]">Your Selection</h2>
+        <h2 className="text-sm font-bold text-[var(--bj-gold)]">{common.cart.yourSelection}</h2>
         <p className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-6 text-center text-sm text-stone-600 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-400">
-          Your cart is empty. Add items from the menu on Home.
+          {common.cart.emptyMessage}
         </p>
       </section>
     );
@@ -95,7 +99,7 @@ export function SelectionList() {
 
   return (
     <section className="space-y-3 px-4">
-      <h2 className="text-sm font-bold text-[var(--bj-gold)]">Your Selection</h2>
+      <h2 className="text-sm font-bold text-[var(--bj-gold)]">{common.cart.yourSelection}</h2>
       <div className="space-y-3">
         {lines.map((line) => {
           const product = getProductById(line.productId);
