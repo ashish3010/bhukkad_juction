@@ -1,4 +1,5 @@
 import type { CartLine } from "@/shared/types/food";
+import { appendPlacedOrder } from "@/features/orders/order-history-storage";
 import { getProductById } from "@/shared/data/menu";
 import { loadAddressBook } from "@/features/checkout/delivery-address-storage";
 
@@ -56,6 +57,21 @@ export function writeOrderPlacedSnapshot(lines: CartLine[]): OrderPlacedSnapshot
     placedAt: Date.now(),
   };
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(snap));
+
+  const firstProduct = lines[0] ? getProductById(lines[0].productId) : undefined;
+  appendPlacedOrder({
+    orderId: snap.orderId,
+    placedAt: snap.placedAt,
+    total: snap.total,
+    lines: lines.map((cl, i) => ({
+      productId: cl.productId,
+      name: orderLines[i]?.name ?? getProductById(cl.productId)?.name ?? cl.productId,
+      quantity: cl.quantity,
+      lineTotal: orderLines[i]?.lineTotal ?? 0,
+    })),
+    previewImage: firstProduct?.image ?? "",
+  });
+
   return snap;
 }
 

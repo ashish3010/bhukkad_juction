@@ -2,14 +2,14 @@ import { DotLottieReact, type DotLottie } from "@lottiefiles/dotlottie-react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useCart } from "@/features/cart/cart-store";
+import { useCartStore } from "@/features/cart/cart-store";
 import { readOrderPlacedSnapshot } from "@/features/checkout/order-placed-snapshot";
 
 const LOTTIE_SRC = "/animation/Success.lottie";
 
 export function OrderPlacingWaitingScreen() {
   const router = useRouter();
-  const { clear } = useCart();
+  const clear = useCartStore((s) => s.clear);
   const [dotLottie, setDotLottie] = useState<DotLottie | null>(null);
   const navigatedRef = useRef(false);
 

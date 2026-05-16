@@ -2,12 +2,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { IconBag, IconMenu } from "@/shared/components/icons";
 import { NavDrawer } from "@/features/layout/components/NavDrawer";
-import { useCart } from "@/features/cart/cart-store";
+import { useCartStore } from "@/features/cart/cart-store";
 import { SITE_NAME } from "@/shared/site-meta";
 
 export function AppHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { totalCount } = useCart();
+  const totalCount = useCartStore((s) => s.lines.reduce((sum, l) => sum + l.quantity, 0));
 
   return (
     <>

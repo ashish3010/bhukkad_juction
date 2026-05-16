@@ -11,7 +11,7 @@ export function MainAppShell({ children, showAppHeader = true }: Props) {
   return (
     <div className="mx-auto min-h-screen w-full max-w-md bg-[var(--bj-bg)] pb-8 text-stone-900 dark:text-zinc-100">
       {showAppHeader ? <AppHeader /> : null}
-      {children}
+      <main id="main-content">{children}</main>
     </div>
   );
 }

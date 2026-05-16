@@ -1,9 +1,10 @@
 import Image from "next/image";
+import { memo } from "react";
 import type { Category } from "@/shared/types/food";
 
 type Props = { categories: Category[] };
 
-export function CategoryRail({ categories }: Props) {
+export const CategoryRail = memo(function CategoryRail({ categories }: Props) {
   return (
     <section id="categories" className="pb-6">
       <div className="mb-3 px-4">
@@ -31,4 +32,4 @@ export function CategoryRail({ categories }: Props) {
       </div>
     </section>
   );
-}
+});

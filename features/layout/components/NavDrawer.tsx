@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AppLogo } from "@/features/layout/components/AppLogo";
-import { IconBag, IconGrid, IconHome, IconX } from "@/shared/components/icons";
-import { useCart } from "@/features/cart/cart-store";
+import { IconBag, IconGrid, IconHome, IconReceipt, IconX } from "@/shared/components/icons";
+import { useCartStore } from "@/features/cart/cart-store";
 import { useTheme } from "@/features/theme/theme-context";
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
 const navItems = [
   { key: "home", href: "/home", label: "Home", icon: IconHome },
   { key: "categories", href: "/home#categories", label: "Categories", icon: IconGrid },
+  { key: "orders", href: "/orders", label: "Orders", icon: IconReceipt },
   { key: "cart", href: "/order-summary", label: "Cart", icon: IconBag, badge: true as const },
 ];
 
@@ -20,12 +21,13 @@ function isActiveItem(key: string, pathname: string, asPath: string): boolean {
   if (key === "home") return pathname === "/home" && !asPath.includes("#categories");
   if (key === "categories") return pathname === "/home" && asPath.includes("#categories");
   if (key === "cart") return pathname === "/order-summary" || pathname.startsWith("/checkout/");
+  if (key === "orders") return pathname === "/orders";
   return false;
 }
 
 export function NavDrawer({ open, onClose }: Props) {
   const router = useRouter();
-  const { totalCount } = useCart();
+  const totalCount = useCartStore((s) => s.lines.reduce((sum, l) => sum + l.quantity, 0));
   const { pathname, asPath } = router;
   const { theme, setTheme } = useTheme();
 

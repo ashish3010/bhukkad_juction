@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { useMemo } from "react";
+import { memo, useCallback } from "react";
 import { Button } from "@/shared/components/ui/Button";
 import { IconMinus, IconPlus } from "@/shared/components/icons";
-import { useCart } from "@/features/cart/cart-store";
+import { useCartStore } from "@/features/cart/cart-store";
 import { formatProductPrice } from "@/shared/data/menu";
 import type { Product } from "@/shared/types/food";
 
@@ -11,13 +11,22 @@ const stepBtn =
 
 type Props = { product: Product };
 
-export function ProductCard({ product }: Props) {
-  const { lines, add, setLineQuantity } = useCart();
+export const ProductCard = memo(function ProductCard({ product }: Props) {
+  const qty = useCartStore((s) => s.lines.find((l) => l.productId === product.id)?.quantity ?? 0);
+  const add = useCartStore((s) => s.add);
+  const setLineQuantity = useCartStore((s) => s.setLineQuantity);
 
-  const qty = useMemo(
-    () => lines.find((l) => l.productId === product.id)?.quantity ?? 0,
-    [lines, product.id],
-  );
+  const onAdd = useCallback(() => {
+    add(product.id, 1);
+  }, [add, product.id]);
+
+  const onDec = useCallback(() => {
+    setLineQuantity(product.id, qty - 1);
+  }, [setLineQuantity, product.id, qty]);
+
+  const onInc = useCallback(() => {
+    setLineQuantity(product.id, qty + 1);
+  }, [setLineQuantity, product.id, qty]);
 
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200/80 dark:bg-zinc-900 dark:ring-zinc-800">
@@ -41,7 +50,7 @@ export function ProductCard({ product }: Props) {
             type="button"
             variant="primary"
             className="w-full py-2 text-[11px] font-bold"
-            onClick={() => add(product.id, 1)}
+            onClick={onAdd}
           >
             <IconPlus className="h-3.5 w-3.5" />
             Add to cart
@@ -56,7 +65,7 @@ export function ProductCard({ product }: Props) {
               type="button"
               className={`${stepBtn} bg-stone-200 text-stone-800 hover:bg-stone-300 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600`}
               aria-label="Decrease quantity"
-              onClick={() => setLineQuantity(product.id, qty - 1)}
+              onClick={onDec}
             >
               <IconMinus className="h-3.5 w-3.5 shrink-0" />
             </button>
@@ -67,7 +76,7 @@ export function ProductCard({ product }: Props) {
               type="button"
               className={`${stepBtn} bg-[var(--bj-gold-fill)] text-[#1a1203] shadow-[0_2px_6px_rgba(240,180,41,0.35)] hover:brightness-105`}
               aria-label="Increase quantity"
-              onClick={() => setLineQuantity(product.id, qty + 1)}
+              onClick={onInc}
             >
               <IconPlus className="h-3.5 w-3.5 shrink-0" />
             </button>
@@ -76,4 +85,4 @@ export function ProductCard({ product }: Props) {
       </div>
     </div>
   );
-}
+});

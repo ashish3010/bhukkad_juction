@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { Poppins } from "next/font/google";
 import { THEME_STORAGE_KEY, ThemeProvider } from "@/features/theme/theme-context";
 import {
@@ -20,6 +21,19 @@ const poppins = Poppins({
 });
 
 const themeBootstrap = `!function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var t=localStorage.getItem(k);if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;}catch(e){}}();`;
+
+const LCP_HERO_SRC = "/images/landing-hero.png";
+
+/** Preload menu hero so the LCP image is discoverable from HTML early (Lighthouse “LCP request discovery”). */
+function LcpHeroPreload() {
+  const { pathname } = useRouter();
+  if (pathname !== "/" && pathname !== "/home") return null;
+  return (
+    <Head>
+      <link rel="preload" href={LCP_HERO_SRC} as="image" type="image/png" />
+    </Head>
+  );
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   const canonical = absoluteSiteUrl("/");
@@ -56,6 +70,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <div className={`${poppins.variable} min-h-screen font-sans antialiased`}>
         <ThemeProvider>
+          <LcpHeroPreload />
           <Component {...pageProps} />
         </ThemeProvider>
       </div>
