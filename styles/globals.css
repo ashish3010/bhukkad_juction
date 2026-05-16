@@ -1,26 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bj-bg: #121212;
+  --bj-gold: #ffc107;
+  --bj-card: #1e1e1e;
+  --bj-danger: #e53935;
+  /** Stack sticky bars below `AppHeader` (safe area + header padding + row). */
+  --bj-sticky-back-top: calc(max(0.75rem, env(safe-area-inset-top, 0px)) + 3.25rem);
+  --background: #000000;
+  --foreground: #fafafa;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-app), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

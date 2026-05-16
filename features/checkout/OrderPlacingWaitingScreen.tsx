@@ -1,0 +1,77 @@
+import { DotLottieReact, type DotLottie } from "@lottiefiles/dotlottie-react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useCart } from "@/features/cart/cart-store";
+import { readOrderPlacedSnapshot } from "@/features/checkout/order-placed-snapshot";
+
+const LOTTIE_SRC = "/animation/Success.lottie";
+
+export function OrderPlacingWaitingScreen() {
+  const router = useRouter();
+  const { clear } = useCart();
+  const [dotLottie, setDotLottie] = useState<DotLottie | null>(null);
+  const navigatedRef = useRef(false);
+
+  const goToPlaced = useCallback(() => {
+    if (navigatedRef.current) return;
+    navigatedRef.current = true;
+    void router.replace("/order-placed");
+  }, [router]);
+
+  useEffect(() => {
+    if (!readOrderPlacedSnapshot()) {
+      void router.replace("/home");
+      return;
+    }
+    const id = requestAnimationFrame(() => {
+      clear();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [clear, router]);
+
+  useEffect(() => {
+    if (!dotLottie) return undefined;
+    const onComplete = () => {
+      goToPlaced();
+    };
+    dotLottie.addEventListener("complete", onComplete);
+    return () => {
+      dotLottie.removeEventListener("complete", onComplete);
+    };
+  }, [dotLottie, goToPlaced]);
+
+  useEffect(() => {
+    const tid = setTimeout(() => goToPlaced(), 8000);
+    return () => clearTimeout(tid);
+  }, [goToPlaced]);
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-900 via-[var(--bj-bg)] to-[#0a0a0a] px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="relative flex h-[min(20rem,calc(100vw-2rem))] w-[min(20rem,calc(100vw-2rem))] shrink-0 items-center justify-center sm:h-80 sm:w-80">
+        <DotLottieReact
+          src={LOTTIE_SRC}
+          loop={false}
+          autoplay
+          backgroundColor="transparent"
+          dotLottieRefCallback={setDotLottie}
+          layout={{ fit: "contain", align: [0.5, 0.5] }}
+          className="relative h-full w-full"
+          renderConfig={{ autoResize: true }}
+        />
+      </div>
+
+      <p className="mt-8 text-center text-lg font-semibold text-zinc-100">
+        Order Confirmed 🎉
+      </p>
+
+      <p className="mt-2 text-center text-sm text-zinc-400">
+        We’re preparing your food
+      </p>
+
+      <p className="mt-5 text-sm font-medium text-[var(--bj-gold)]">
+        Cash on Delivery
+      </p>
+    </div>
+  );
+}

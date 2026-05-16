@@ -1,9 +1,13 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Head, Html, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html lang="en">
-      <Head />
+    <Html lang="en-IN">
+      <Head>
+        <link rel="icon" href="/images/logo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/images/logo.png" />
+        <meta name="theme-color" content="#121212" />
+      </Head>
       <body className="antialiased">
         <Main />
         <NextScript />

@@ -1,0 +1,29 @@
+import { CATEGORIES, getProductsByCategory } from "@/shared/data/menu";
+import { CategoryRail } from "@/features/home/components/CategoryRail";
+import { ProductCard } from "@/features/home/components/ProductCard";
+import { PromoHero } from "@/features/home/components/PromoHero";
+
+export function HomeScreen() {
+  return (
+    <div className="space-y-2 pb-4">
+      <PromoHero />
+      <CategoryRail categories={CATEGORIES} />
+      {CATEGORIES.map((cat) => {
+        const items = getProductsByCategory(cat.id);
+        if (items.length === 0) return null;
+        return (
+          <section key={cat.id} id={`menu-${cat.id}`} className="scroll-mt-24 px-4 pb-6">
+            <h3 className="mb-3 text-sm font-bold leading-snug text-[var(--bj-gold)]">
+              {cat.menuHeading}
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {items.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  );
+}
