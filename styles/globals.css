@@ -1,14 +1,30 @@
 @import "tailwindcss";
 
+/** Manual dark mode via `<html data-theme="dark">` (see `features/theme/theme-context.tsx`). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  --bj-bg: #121212;
-  --bj-gold: #ffc107;
-  --bj-card: #1e1e1e;
+  --bj-bg: #f5f3ef;
+  /** Dark amber for headings / labels on light backgrounds */
+  --bj-gold: #92400e;
+  /** Bright fill for buttons, chips, steppers */
+  --bj-gold-fill: #f0b429;
+  --bj-card: #ffffff;
   --bj-danger: #e53935;
   /** Stack sticky bars below `AppHeader` (safe area + header padding + row). */
   --bj-sticky-back-top: calc(max(0.75rem, env(safe-area-inset-top, 0px)) + 3.25rem);
-  --background: #000000;
-  --foreground: #fafafa;
+  --background: #f5f3ef;
+  --foreground: #1c1917;
+}
+
+[data-theme="dark"] {
+  --bj-bg: #121212;
+  --bj-gold: #f5d78e;
+  --bj-gold-fill: #ffc107;
+  --bj-card: #1e1e1e;
+  --bj-danger: #e53935;
+  --background: #121212;
+  --foreground: #f5f5f4;
 }
 
 @theme inline {

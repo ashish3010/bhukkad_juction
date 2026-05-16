@@ -47,7 +47,7 @@ export function OrderPlacingWaitingScreen() {
   }, [goToPlaced]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-900 via-[var(--bj-bg)] to-[#0a0a0a] px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))]">
+    <div className="flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-amber-50 via-[var(--bj-bg)] to-stone-100 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] dark:from-zinc-950 dark:via-[var(--bj-bg)] dark:to-zinc-950">
       <div className="relative flex h-[min(20rem,calc(100vw-2rem))] w-[min(20rem,calc(100vw-2rem))] shrink-0 items-center justify-center sm:h-80 sm:w-80">
         <DotLottieReact
           src={LOTTIE_SRC}
@@ -61,11 +61,11 @@ export function OrderPlacingWaitingScreen() {
         />
       </div>
 
-      <p className="mt-8 text-center text-lg font-semibold text-zinc-100">
+      <p className="mt-8 text-center text-lg font-semibold text-stone-900 dark:text-zinc-100">
         Order Confirmed 🎉
       </p>
 
-      <p className="mt-2 text-center text-sm text-zinc-400">
+      <p className="mt-2 text-center text-sm text-stone-600 dark:text-zinc-400">
         We’re preparing your food
       </p>
 

@@ -7,7 +7,7 @@ export function CategoryRail({ categories }: Props) {
   return (
     <section id="categories" className="pb-6">
       <div className="mb-3 px-4">
-        <h3 className="text-base font-semibold text-white">Categories</h3>
+        <h3 className="text-base font-semibold text-stone-900 dark:text-zinc-100">Categories</h3>
       </div>
       <div className="flex gap-4 overflow-x-auto px-4 pb-1 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {categories.map((c) => (
@@ -25,7 +25,7 @@ export function CategoryRail({ categories }: Props) {
                 sizes="64px"
               />
             </div>
-            <p className="mt-2 truncate text-xs font-medium text-zinc-300">{c.name}</p>
+            <p className="mt-2 truncate text-xs font-medium text-stone-700 dark:text-zinc-300">{c.name}</p>
           </a>
         ))}
       </div>

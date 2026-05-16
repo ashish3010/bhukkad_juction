@@ -11,10 +11,10 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-white/5 bg-[var(--bj-bg)]/95 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md">
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-stone-200/80 bg-[var(--bj-bg)]/95 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md dark:border-zinc-800/80">
         <button
           type="button"
-          className="rounded-full p-2 text-white/90 hover:bg-white/5"
+          className="rounded-full p-2 text-stone-700 hover:bg-stone-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/80"
           aria-label="Open menu"
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen(true)}
@@ -32,7 +32,7 @@ export function AppHeader() {
         </Link>
         <Link
           href="/order-summary"
-          className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-[#333] to-[#111] text-white/90 hover:border-[var(--bj-gold)]/40 hover:text-[var(--bj-gold)]"
+          className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-stone-100 text-stone-700 hover:border-[var(--bj-gold)]/35 hover:text-[var(--bj-gold)] dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:border-[var(--bj-gold)]/40"
           aria-label={`Cart${totalCount > 0 ? `, ${totalCount} items` : ""}`}
         >
           <IconBag className="h-4 w-4" />

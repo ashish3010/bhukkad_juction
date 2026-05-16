@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <link rel="icon" href="/images/logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/images/logo.png" />
-        <meta name="theme-color" content="#121212" />
+        <meta name="theme-color" content="#f5f3ef" />
       </Head>
       <body className="antialiased">
         <Main />

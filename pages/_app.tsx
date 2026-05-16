@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Poppins } from "next/font/google";
+import { THEME_STORAGE_KEY, ThemeProvider } from "@/features/theme/theme-context";
 import {
   LOGO_PATH,
   SITE_DESCRIPTION,
@@ -18,6 +19,8 @@ const poppins = Poppins({
   variable: "--font-app",
 });
 
+const themeBootstrap = `!function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var t=localStorage.getItem(k);if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;}catch(e){}}();`;
+
 export default function App({ Component, pageProps }: AppProps) {
   const canonical = absoluteSiteUrl("/");
   const ogImage = absoluteSiteUrl(LOGO_PATH);
@@ -25,6 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <title>{SITE_TITLE}</title>
         <meta name="description" content={SITE_DESCRIPTION} />
@@ -51,7 +55,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: restaurantJsonLd() }} />
       </Head>
       <div className={`${poppins.variable} min-h-screen font-sans antialiased`}>
-        <Component {...pageProps} />
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </div>
     </>
   );

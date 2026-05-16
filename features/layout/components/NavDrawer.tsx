@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { AppLogo } from "@/features/layout/components/AppLogo";
 import { IconBag, IconGrid, IconHome, IconX } from "@/shared/components/icons";
 import { useCart } from "@/features/cart/cart-store";
+import { useTheme } from "@/features/theme/theme-context";
 
 type Props = {
   open: boolean;
@@ -26,6 +27,7 @@ export function NavDrawer({ open, onClose }: Props) {
   const router = useRouter();
   const { totalCount } = useCart();
   const { pathname, asPath } = router;
+  const { theme, setTheme } = useTheme();
 
   if (!open) return null;
 
@@ -33,22 +35,22 @@ export function NavDrawer({ open, onClose }: Props) {
     <div className="fixed inset-0 z-[100]">
       <button
         type="button"
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-stone-900/25 backdrop-blur-sm dark:bg-black/55"
         aria-label="Close menu"
         onClick={onClose}
       />
       <nav
-        className="absolute left-0 top-0 flex h-full w-[min(88%,280px)] flex-col bg-[#141414] py-4 shadow-2xl ring-1 ring-white/10"
+        className="absolute left-0 top-0 flex h-full w-[min(88%,280px)] flex-col bg-white py-4 shadow-2xl ring-1 ring-stone-200 dark:bg-zinc-950 dark:ring-zinc-800"
         aria-label="Main menu"
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-4 pb-4">
+        <div className="flex items-center justify-between border-b border-stone-300 px-4 pb-4 dark:border-zinc-700">
           <div className="flex min-w-0 items-center gap-2">
             <AppLogo width={32} decorative />
-            <span className="text-sm font-semibold text-[var(--bj-gold)]">Menu</span>
+            <span className="text-sm font-semibold text-stone-900 dark:text-zinc-100">Menu</span>
           </div>
           <button
             type="button"
-            className="rounded-full p-2 text-white/80 hover:bg-white/10"
+            className="rounded-full p-2 text-stone-600 hover:bg-stone-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
             aria-label="Close"
             onClick={onClose}
           >
@@ -62,12 +64,20 @@ export function NavDrawer({ open, onClose }: Props) {
               <li key={key}>
                 <Link
                   href={href}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium ${
-                    active ? "bg-white/10 text-[var(--bj-gold)]" : "text-white/90 hover:bg-white/10"
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm ${
+                    active
+                      ? "border border-amber-500/80 bg-amber-100 font-semibold text-amber-950 shadow-sm dark:border-amber-500/50 dark:bg-amber-500/15 dark:text-amber-100 dark:shadow-none"
+                      : "border border-transparent font-medium text-stone-900 hover:border-stone-200 hover:bg-stone-100 dark:text-zinc-100 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
                   }`}
                   onClick={onClose}
                 >
-                  <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/5">
+                  <span
+                    className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+                      active
+                        ? "bg-amber-200 text-amber-950 ring-1 ring-amber-500/40 dark:bg-amber-500/25 dark:text-amber-50 dark:ring-amber-400/40"
+                        : "bg-stone-200 text-stone-800 ring-1 ring-stone-300/80 dark:bg-zinc-800 dark:text-zinc-200 dark:ring-zinc-600/80"
+                    }`}
+                  >
                     <Icon className="h-5 w-5" />
                     {badge && totalCount > 0 ? (
                       <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">
@@ -81,6 +91,34 @@ export function NavDrawer({ open, onClose }: Props) {
             );
           })}
         </ul>
+
+        <div className="mt-auto border-t border-stone-300 px-4 pb-1 pt-4 dark:border-zinc-700">
+          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500 dark:text-zinc-500">Appearance</p>
+          <div className="mt-2 grid grid-cols-2 gap-2" role="group" aria-label="Theme">
+            <button
+              type="button"
+              onClick={() => setTheme("light")}
+              className={`rounded-xl border px-3 py-2.5 text-center text-sm font-semibold transition ${
+                theme === "light"
+                  ? "border-amber-500 bg-amber-100 text-amber-950 dark:border-amber-400 dark:bg-amber-500/20 dark:text-amber-50"
+                  : "border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              }`}
+            >
+              Light
+            </button>
+            <button
+              type="button"
+              onClick={() => setTheme("dark")}
+              className={`rounded-xl border px-3 py-2.5 text-center text-sm font-semibold transition ${
+                theme === "dark"
+                  ? "border-amber-500 bg-amber-100 text-amber-950 dark:border-amber-400 dark:bg-amber-500/20 dark:text-amber-50"
+                  : "border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              }`}
+            >
+              Dark
+            </button>
+          </div>
+        </div>
       </nav>
     </div>
   );

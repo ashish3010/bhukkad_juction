@@ -23,8 +23,8 @@ function StepCircle({
     <div
       className={`box-border flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold ${
         gold
-          ? "border-[var(--bj-gold)] bg-[var(--bj-gold)] text-[#1a1203]"
-          : "border-zinc-700 bg-zinc-900 text-zinc-500"
+          ? "border-[var(--bj-gold)] bg-[var(--bj-gold-fill)] text-[#1a1203]"
+          : "border-stone-300 bg-stone-100 text-stone-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-500"
       }`}
     >
       {done ? <IconCheck className="h-5 w-5" /> : <span>{step}</span>}
@@ -45,7 +45,7 @@ function StepLabel({
   const active = current === step;
   const gold = done || active;
   return (
-    <span className={`text-xs font-semibold ${gold ? "text-[var(--bj-gold)]" : "text-zinc-500"}`}>{label}</span>
+    <span className={`text-xs font-semibold ${gold ? "text-[var(--bj-gold)]" : "text-stone-500 dark:text-zinc-500"}`}>{label}</span>
   );
 }
 
@@ -57,7 +57,7 @@ export function CheckoutStepper({ current }: Props) {
       <div className="grid w-fit grid-cols-[auto_1.25rem_auto] items-center justify-items-center gap-x-1.5 gap-y-2">
         <StepCircle step={first.step} current={current} />
         <div className="flex h-10 w-full items-center justify-center self-center">
-          <div className="h-px w-full bg-zinc-700" />
+          <div className="h-px w-full bg-stone-300 dark:bg-zinc-600" />
         </div>
         <StepCircle step={second.step} current={current} />
         <StepLabel step={first.step} current={current} label={first.label} />

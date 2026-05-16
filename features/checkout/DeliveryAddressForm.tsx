@@ -21,7 +21,7 @@ import {
 } from "@/shared/components/icons";
 
 const inputShell =
-  "flex w-full items-start gap-3 rounded-2xl border border-white/10 bg-[#1a1a1a] px-3 py-3 text-left text-sm text-white placeholder:text-zinc-500 focus-within:border-[var(--bj-gold)]/40 focus-within:ring-1 focus-within:ring-[var(--bj-gold)]/20";
+  "flex w-full items-start gap-3 rounded-2xl border border-stone-200 bg-white px-3 py-3 text-left text-sm text-stone-900 shadow-sm placeholder:text-stone-400 focus-within:border-[var(--bj-gold)]/50 focus-within:ring-1 focus-within:ring-[var(--bj-gold-fill)]/30 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500";
 
 /** Strip non-digits; if value looks like 91 + 10 digits, keep the last 10. Cap at 10 digits for storage. */
 function normalizePhoneDigits(raw: string): string {
@@ -84,7 +84,7 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
           <button
             type="button"
             onClick={onCancel}
-            className="inline-flex items-center gap-2 text-sm font-medium text-zinc-300 transition hover:text-white"
+            className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 transition hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             <IconArrowLeft className="h-4 w-4 shrink-0" />
             Saved addresses
@@ -92,7 +92,7 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
         ) : (
           <Link
             href="/order-summary"
-            className="inline-flex items-center gap-2 text-sm font-medium text-zinc-300 transition hover:text-white"
+            className="inline-flex items-center gap-2 text-sm font-medium text-stone-600 transition hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             <IconArrowLeft className="h-4 w-4 shrink-0" />
             Back to cart
@@ -106,14 +106,14 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
         <section className="space-y-4">
           <h2 className="text-lg font-bold text-[var(--bj-gold)]">Receiver Information</h2>
           <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-zinc-400" htmlFor="checkout-full-name">
+            <label className="block text-xs font-medium text-stone-500 dark:text-zinc-400" htmlFor="checkout-full-name">
               Full Name
             </label>
             <div className={inputShell}>
-              <IconIdCard className="mt-0.5 h-5 w-5 shrink-0 text-zinc-500" />
+              <IconIdCard className="mt-0.5 h-5 w-5 shrink-0 text-stone-400 dark:text-zinc-500" />
               <input
                 id="checkout-full-name"
-                className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-zinc-500"
+                className="min-w-0 flex-1 bg-transparent text-stone-900 outline-none placeholder:text-stone-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
                 placeholder="Enter your full name"
                 autoComplete="name"
                 value={fullName}
@@ -122,23 +122,23 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
             </div>
           </div>
           <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-zinc-400" htmlFor="checkout-phone">
+            <label className="block text-xs font-medium text-stone-500 dark:text-zinc-400" htmlFor="checkout-phone">
               Contact Number
             </label>
             <div className={inputShell}>
-              <IconPhone className="mt-0.5 h-5 w-5 shrink-0 text-zinc-500" />
+              <IconPhone className="mt-0.5 h-5 w-5 shrink-0 text-stone-400 dark:text-zinc-500" />
               <input
                 id="checkout-phone"
                 type="tel"
                 inputMode="numeric"
                 autoComplete="tel"
-                className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-zinc-500"
+                className="min-w-0 flex-1 bg-transparent text-stone-900 outline-none placeholder:text-stone-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
                 placeholder="9876543210"
                 value={phone}
                 onChange={(e) => setPhone(normalizePhoneDigits(e.target.value))}
               />
             </div>
-            <p className="text-xs text-zinc-500">Digits only — 10-digit mobile number.</p>
+            <p className="text-xs text-stone-500 dark:text-zinc-500">Digits only — 10-digit mobile number.</p>
             {phoneInvalid ? (
               <p className="text-xs text-[var(--bj-danger)]">Enter a valid 10-digit mobile number.</p>
             ) : null}
@@ -152,10 +152,10 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
               Delivery address
             </label>
             <div className={`${inputShell} items-start`}>
-              <IconMapPin className="mt-0.5 h-5 w-5 shrink-0 text-zinc-500" />
+              <IconMapPin className="mt-0.5 h-5 w-5 shrink-0 text-stone-400 dark:text-zinc-500" />
               <textarea
                 id="checkout-address"
-                className="min-h-[100px] min-w-0 flex-1 resize-y bg-transparent text-white outline-none placeholder:text-zinc-500"
+                className="min-h-[100px] min-w-0 flex-1 resize-y bg-transparent text-stone-900 outline-none placeholder:text-stone-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
                 placeholder="Flat / House No., Street Name, Landmark, City"
                 rows={4}
                 autoComplete="street-address"
@@ -181,8 +181,8 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
                   onClick={() => setAddressKind(id)}
                   className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition ${
                     selected
-                      ? "border-[var(--bj-gold)] bg-[var(--bj-gold)]/10 text-[var(--bj-gold)]"
-                      : "border-white/15 bg-zinc-900/60 text-[var(--bj-gold)] hover:border-white/25"
+                      ? "border-[var(--bj-gold)] bg-[var(--bj-gold-fill)]/20 text-[var(--bj-gold)]"
+                      : "border-stone-200 bg-stone-100 text-[var(--bj-gold)] hover:border-stone-300 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600"
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -194,12 +194,12 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
 
           {addressKind === "other" ? (
             <div className="space-y-1.5">
-              <label className="block text-xs font-medium text-zinc-400" htmlFor="checkout-other-label">
+              <label className="block text-xs font-medium text-stone-500 dark:text-zinc-400" htmlFor="checkout-other-label">
                 Other label (optional)
               </label>
               <input
                 id="checkout-other-label"
-                className="w-full rounded-2xl border border-white/10 bg-[#1a1a1a] px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-500 focus:border-[var(--bj-gold)]/40 focus:ring-1 focus:ring-[var(--bj-gold)]/20"
+                className="w-full rounded-2xl border border-stone-200 bg-white px-3 py-2.5 text-sm text-stone-900 shadow-sm outline-none placeholder:text-stone-400 focus:border-[var(--bj-gold)]/50 focus:ring-1 focus:ring-[var(--bj-gold-fill)]/30 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
                 placeholder="e.g. Gym, parents home"
                 value={otherLabel}
                 onChange={(e) => setOtherLabel(e.target.value)}
@@ -209,7 +209,7 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-white/5 bg-[var(--bj-bg)]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md">
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-stone-200/80 bg-[var(--bj-bg)]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md dark:border-zinc-800/80">
         <div className="mx-auto w-full max-w-md">
           <Button
             className="w-full justify-center py-3.5 text-base"
@@ -219,7 +219,7 @@ export function DeliveryAddressForm({ editingEntry, hasSavedAddresses, onCancel,
             Save & place order
             <IconArrowRight className="h-5 w-5" />
           </Button>
-          <p className="mt-3 text-center text-[10px] leading-snug text-zinc-500">
+          <p className="mt-3 text-center text-[10px] leading-snug text-stone-500 dark:text-zinc-500">
             Saved on this device · The Bhukkad Junction
           </p>
         </div>

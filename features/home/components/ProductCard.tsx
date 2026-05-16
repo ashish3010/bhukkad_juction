@@ -7,7 +7,7 @@ import { formatProductPrice } from "@/shared/data/menu";
 import type { Product } from "@/shared/types/food";
 
 const stepBtn =
-  "flex size-7 shrink-0 items-center justify-center rounded-full transition active:scale-95 disabled:opacity-50";
+  "flex size-8 shrink-0 items-center justify-center rounded-full transition active:scale-95 disabled:opacity-50";
 
 type Props = { product: Product };
 
@@ -20,7 +20,7 @@ export function ProductCard({ product }: Props) {
   );
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-[#161616] ring-1 ring-white/5">
+    <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200/80 dark:bg-zinc-900 dark:ring-zinc-800">
       <div className="relative aspect-square w-full">
         <Image
           src={product.image}
@@ -31,9 +31,9 @@ export function ProductCard({ product }: Props) {
         />
       </div>
       <div className="space-y-2 p-3">
-        <p className="line-clamp-3 text-xs font-semibold leading-snug text-white">{product.name}</p>
+        <p className="line-clamp-3 text-xs font-semibold leading-snug text-stone-800 dark:text-zinc-100">{product.name}</p>
         {product.subtitle ? (
-          <p className="line-clamp-2 text-[11px] text-zinc-500">{product.subtitle}</p>
+          <p className="line-clamp-2 text-[11px] text-stone-500 dark:text-zinc-400">{product.subtitle}</p>
         ) : null}
         <p className="text-sm font-bold text-[var(--bj-gold)]">{formatProductPrice(product)}</p>
         {qty === 0 ? (
@@ -48,28 +48,28 @@ export function ProductCard({ product }: Props) {
           </Button>
         ) : (
           <div
-            className="inline-flex w-fit max-w-full items-center gap-0 rounded-full bg-[#1a1a1a] p-0.5 ring-1 ring-white/10"
+            className="inline-flex w-fit max-w-full items-center gap-0 rounded-full bg-stone-100 p-0.5 ring-1 ring-stone-200 dark:bg-zinc-800 dark:ring-zinc-700"
             role="group"
             aria-label="Quantity"
           >
             <button
               type="button"
-              className={`${stepBtn} bg-zinc-800 text-white hover:bg-zinc-700`}
+              className={`${stepBtn} bg-stone-200 text-stone-800 hover:bg-stone-300 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600`}
               aria-label="Decrease quantity"
               onClick={() => setLineQuantity(product.id, qty - 1)}
             >
-              <IconMinus className="h-3 w-3 shrink-0" />
+              <IconMinus className="h-3.5 w-3.5 shrink-0" />
             </button>
-            <span className="px-2 text-center text-xs font-bold tabular-nums leading-none text-white">
+            <span className="px-2 text-center text-xs font-bold tabular-nums leading-none text-stone-900 dark:text-zinc-100">
               {qty}
             </span>
             <button
               type="button"
-              className={`${stepBtn} bg-[var(--bj-gold)] text-[#1a1203] shadow-[0_2px_6px_rgba(255,193,7,0.2)] hover:brightness-105`}
+              className={`${stepBtn} bg-[var(--bj-gold-fill)] text-[#1a1203] shadow-[0_2px_6px_rgba(240,180,41,0.35)] hover:brightness-105`}
               aria-label="Increase quantity"
               onClick={() => setLineQuantity(product.id, qty + 1)}
             >
-              <IconPlus className="h-3 w-3 shrink-0" />
+              <IconPlus className="h-3.5 w-3.5 shrink-0" />
             </button>
           </div>
         )}
