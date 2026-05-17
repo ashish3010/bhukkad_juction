@@ -107,10 +107,6 @@ export function OrderPlacedScreen() {
             <span>{common.orderPlaced.subtotal}</span>
             <span>₹{snap.subtotal}</span>
           </div>
-          <div className="flex justify-between text-stone-700 dark:text-zinc-300">
-            <span>{common.orderPlaced.deliveryCharge}</span>
-            <span>₹{snap.deliveryFee}</span>
-          </div>
         </div>
         <div className="mt-3 flex items-center justify-between">
           <span className="text-sm font-medium text-stone-800 dark:text-zinc-300">{common.orderPlaced.totalAmount}</span>

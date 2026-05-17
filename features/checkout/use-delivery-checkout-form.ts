@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useCart } from "@/features/cart/cart-store";
 import type { PaymentMethodId } from "@/features/checkout/payment-method";
-import { CHECKOUT_DELIVERY_FEE } from "@/features/checkout/pricing";
 import {
   type DeliveryAddressKind,
   type SavedAddressEntry,
@@ -54,8 +53,6 @@ export function useDeliveryCheckoutForm(
       return sum + (p ? p.price * line.quantity : 0);
     }, 0);
   }, [lines]);
-  const deliveryFee = CHECKOUT_DELIVERY_FEE;
-  const grandTotal = subtotal + deliveryFee;
 
   const setPhoneNormalized = useCallback((raw: string) => {
     setPhone(normalizePhoneDigits(raw));
@@ -111,8 +108,6 @@ export function useDeliveryCheckoutForm(
     paymentMethod,
     setPaymentMethod,
     subtotal,
-    deliveryFee,
-    grandTotal,
     canSave,
     phoneInvalid,
     persistIfValid,

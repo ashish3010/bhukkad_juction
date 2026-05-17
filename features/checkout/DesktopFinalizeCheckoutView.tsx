@@ -31,8 +31,6 @@ const textareaClass =
 
 type Props = {
   subtotal: number;
-  deliveryFee: number;
-  grandTotal: number;
   fullName: string;
   onFullNameChange: (v: string) => void;
   phone: string;
@@ -78,8 +76,6 @@ function SectionTitle({
 
 export function DesktopFinalizeCheckoutView({
   subtotal,
-  deliveryFee,
-  grandTotal,
   fullName,
   onFullNameChange,
   phone,
@@ -381,17 +377,13 @@ export function DesktopFinalizeCheckoutView({
                     <span>{common.orderPlaced.subtotal}</span>
                     <span className="tabular-nums">₹{subtotal}</span>
                   </div>
-                  <div className="flex justify-between text-stone-700 dark:text-zinc-300">
-                    <span>{common.orderPlaced.deliveryCharge}</span>
-                    <span className="tabular-nums">₹{deliveryFee}</span>
-                  </div>
                 </div>
                 <div className="mt-4 flex items-end justify-between border-t border-stone-200 pt-4 dark:border-zinc-700">
                   <span className="text-sm font-medium text-stone-800 dark:text-zinc-300">
                     {common.orderPlaced.totalAmount}
                   </span>
                   <span className="text-2xl font-bold tabular-nums text-[var(--bj-gold)]">
-                    ₹{grandTotal}
+                    ₹{subtotal}
                   </span>
                 </div>
                 {!hidePaymentAndCoupon ? (

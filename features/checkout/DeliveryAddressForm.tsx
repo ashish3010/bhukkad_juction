@@ -216,8 +216,6 @@ export function DeliveryAddressForm({
       <div className="hidden min-[601px]:block">
         <DesktopFinalizeCheckoutView
           subtotal={form.subtotal}
-          deliveryFee={form.deliveryFee}
-          grandTotal={form.grandTotal}
           fullName={form.fullName}
           onFullNameChange={form.setFullName}
           phone={form.phone}

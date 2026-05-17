@@ -1,2 +1,2 @@
-/** Flat delivery fee (₹) included in checkout total and Telegram order message. */
-export const CHECKOUT_DELIVERY_FEE = 10;
+/** Kept at 0 — no separate delivery line or surcharge in checkout / totals. */
+export const CHECKOUT_DELIVERY_FEE = 0;

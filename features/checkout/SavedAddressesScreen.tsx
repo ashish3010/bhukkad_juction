@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { CheckoutStepper } from "@/features/checkout/components/CheckoutStepper";
 import { SelectionList } from "@/features/checkout/components/SelectionList";
-import { CHECKOUT_DELIVERY_FEE } from "@/features/checkout/pricing";
 import { setDefaultAddress, type SavedAddressEntry } from "@/features/checkout/delivery-address-storage";
 import { Button } from "@/shared/components/ui/Button";
 import { useCartStore } from "@/features/cart/cart-store";
@@ -55,8 +54,6 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
       return sum + (p ? p.price * line.quantity : 0);
     }, 0);
   }, [lines]);
-  const deliveryFee = CHECKOUT_DELIVERY_FEE;
-  const grandTotal = subtotal + deliveryFee;
 
   const onSelectCard = (id: string) => {
     setDefaultAddress(id);
@@ -244,13 +241,9 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
                     <span>{common.orderPlaced.subtotal}</span>
                     <span>₹{subtotal}</span>
                   </div>
-                  <div className="flex justify-between text-stone-700 dark:text-zinc-300">
-                    <span>{common.orderPlaced.deliveryCharge}</span>
-                    <span>₹{deliveryFee}</span>
-                  </div>
                   <div className="flex justify-between border-t border-stone-200 pt-3 text-base font-bold dark:border-zinc-700">
                     <span className="text-stone-800 dark:text-zinc-200">{common.orderPlaced.totalAmount}</span>
-                    <span className="text-[var(--bj-gold)]">₹{grandTotal}</span>
+                    <span className="text-[var(--bj-gold)]">₹{subtotal}</span>
                   </div>
                 </div>
               ) : null}

@@ -77,7 +77,7 @@ function formatOrderMessage(s: OrderPlacedSnapshot): string {
     .join("\n");
   const moneyLines: string[] = [
     replaceCopy(t.subtotalLine, { subtotal: s.subtotal }),
-    replaceCopy(t.deliveryLine, { fee: s.deliveryFee }),
+    ...(s.deliveryFee > 0 ? [replaceCopy(t.deliveryLine, { fee: s.deliveryFee })] : []),
     replaceCopy(t.taxesLine, { taxes: 0 }),
     replaceCopy(t.totalLine, { total: s.total }),
   ];
