@@ -88,7 +88,7 @@ export function SelectionList() {
 
   if (lines.length === 0) {
     return (
-      <section className="space-y-3 px-4">
+      <section className="space-y-3 px-4 min-[601px]:px-0">
         <h2 className="text-sm font-bold text-[var(--bj-gold)]">{common.cart.yourSelection}</h2>
         <p className="rounded-2xl border border-stone-200 bg-stone-50 px-4 py-6 text-center text-sm text-stone-600 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-400">
           {common.cart.emptyMessage}
@@ -98,7 +98,7 @@ export function SelectionList() {
   }
 
   return (
-    <section className="space-y-3 px-4">
+    <section className="space-y-3 px-4 min-[601px]:px-0">
       <h2 className="text-sm font-bold text-[var(--bj-gold)]">{common.cart.yourSelection}</h2>
       <div className="space-y-3">
         {lines.map((line) => {

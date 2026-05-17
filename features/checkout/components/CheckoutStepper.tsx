@@ -53,7 +53,7 @@ export function CheckoutStepper({ current }: Props) {
   const [first, second] = steps;
 
   return (
-    <div className="flex justify-center px-4 pb-1 pt-5">
+    <div className="flex justify-center px-4 pb-1 pt-5 min-[601px]:px-0 min-[601px]:pt-3">
       <div className="grid w-fit grid-cols-[auto_1.25rem_auto] items-center justify-items-center gap-x-1.5 gap-y-2">
         <StepCircle step={first.step} current={current} />
         <div className="flex h-10 w-full items-center justify-center self-center">

@@ -2,10 +2,9 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useLayoutEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -46,30 +45,66 @@ type ThemeContextValue = {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
+/** Module-level snapshot so SSR + first client paint both read `"light"`; then we sync before paint. */
+let themeSnapshot: ThemeMode = "light";
+const themeListeners = new Set<() => void>();
+
+function emitTheme() {
+  themeListeners.forEach((l) => l());
+}
+
+function subscribeTheme(onChange: () => void) {
+  if (typeof window === "undefined") return () => {};
+  themeListeners.add(onChange);
+  const onStorage = (e: StorageEvent) => {
+    if (e.key !== THEME_STORAGE_KEY || e.storageArea !== localStorage) return;
+    const v = e.newValue;
+    if (v === "dark" || v === "light") {
+      themeSnapshot = v;
+      applyTheme(v);
+      emitTheme();
+    }
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    themeListeners.delete(onChange);
+    window.removeEventListener("storage", onStorage);
+  };
+}
+
+function getThemeSnapshot(): ThemeMode {
+  return themeSnapshot;
+}
+
+function getServerThemeSnapshot(): ThemeMode {
+  return "light";
+}
+
+function readResolvedTheme(): ThemeMode {
+  const fromDom = document.documentElement.dataset.theme;
+  if (fromDom === "dark" || fromDom === "light") return fromDom;
+  return getStoredTheme();
+}
+
 /** Keeps `theme` in sync with `localStorage` and restores it on reload (see inline script in `_app.tsx`). */
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>(() =>
-    typeof window !== "undefined" ? getStoredTheme() : "light",
-  );
-
-  const setTheme = useCallback((mode: ThemeMode) => {
-    setThemeState(mode);
-  }, []);
+  const theme = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getServerThemeSnapshot);
 
   useLayoutEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    const resolved = readResolvedTheme();
+    if (resolved === themeSnapshot) {
+      applyTheme(resolved);
+      return;
+    }
+    themeSnapshot = resolved;
+    applyTheme(resolved);
+    emitTheme();
+  }, []);
 
-  useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key !== THEME_STORAGE_KEY || e.storageArea !== localStorage) return;
-      const v = e.newValue;
-      if (v === "dark" || v === "light") {
-        setThemeState(v);
-      }
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+  const setTheme = useCallback((mode: ThemeMode) => {
+    themeSnapshot = mode;
+    applyTheme(mode);
+    emitTheme();
   }, []);
 
   const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);

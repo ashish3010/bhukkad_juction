@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AppLogo } from "@/features/layout/components/AppLogo";
-import { IconBag, IconGrid, IconHome, IconReceipt, IconX } from "@/shared/components/icons";
+import { IconBag, IconGrid, IconHome, IconLeaf, IconReceipt, IconX } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
 import { useTheme } from "@/features/theme/theme-context";
 import { common } from "@/shared/data/common";
@@ -13,6 +13,7 @@ type Props = {
 
 const navConfig = [
   { key: "home", href: "/home", labelKey: "home" as const, icon: IconHome },
+  { key: "ourStory", href: "/our-story", labelKey: "ourStory" as const, icon: IconLeaf },
   { key: "categories", href: "/home#categories", labelKey: "categories" as const, icon: IconGrid },
   { key: "orders", href: "/orders", labelKey: "orders" as const, icon: IconReceipt },
   { key: "cart", href: "/order-summary", labelKey: "cart" as const, icon: IconBag, badge: true as const },
@@ -20,6 +21,7 @@ const navConfig = [
 
 function isActiveItem(key: string, pathname: string, asPath: string): boolean {
   if (key === "home") return pathname === "/home" && !asPath.includes("#categories");
+  if (key === "ourStory") return pathname === "/our-story";
   if (key === "categories") return pathname === "/home" && asPath.includes("#categories");
   if (key === "cart") return pathname === "/order-summary" || pathname.startsWith("/checkout/");
   if (key === "orders") return pathname === "/orders";
@@ -48,7 +50,7 @@ export function NavDrawer({ open, onClose }: Props) {
       >
         <div className="flex items-center justify-between border-b border-stone-300 px-4 pb-4 dark:border-zinc-700">
           <div className="flex min-w-0 items-center gap-2">
-            <AppLogo width={32} decorative />
+            <AppLogo width={32} decorative circleCrop />
             <span className="text-sm font-semibold text-stone-900 dark:text-zinc-100">{common.nav.drawerMenuLabel}</span>
           </div>
           <button

@@ -8,6 +8,8 @@ export type Product = {
   priceNote?: string;
   image: string;
   categoryId: string;
+  /** When true, show a bestseller badge on the menu card */
+  bestseller?: boolean;
 };
 
 export type Category = {

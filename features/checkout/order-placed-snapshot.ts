@@ -1,5 +1,6 @@
 import type { CartLine } from "@/shared/types/food";
 import { appendPlacedOrder } from "@/features/orders/order-history-storage";
+import { CHECKOUT_DELIVERY_FEE } from "@/features/checkout/pricing";
 import { getProductById } from "@/shared/data/menu";
 import { loadAddressBook } from "@/features/checkout/delivery-address-storage";
 
@@ -14,6 +15,10 @@ export type OrderPlacedLine = {
 export type OrderPlacedSnapshot = {
   orderId: string;
   lines: OrderPlacedLine[];
+  /** Sum of line items before delivery. */
+  subtotal: number;
+  deliveryFee: number;
+  /** Subtotal + deliveryFee (+ taxes when added later). */
   total: number;
   deliveryTitle: string;
   deliveryAddress: string;
@@ -26,7 +31,10 @@ function randomOrderSuffix(): string {
   return String(Math.floor(1000 + Math.random() * 9000));
 }
 
-export function writeOrderPlacedSnapshot(lines: CartLine[]): OrderPlacedSnapshot | null {
+export function writeOrderPlacedSnapshot(
+  lines: CartLine[],
+  opts?: { orderNote?: string },
+): OrderPlacedSnapshot | null {
   if (typeof window === "undefined" || lines.length === 0) return null;
   const book = loadAddressBook();
   const def = book.find((e) => e.isDefault) ?? book[0];
@@ -41,17 +49,23 @@ export function writeOrderPlacedSnapshot(lines: CartLine[]): OrderPlacedSnapshot
       lineTotal: price * l.quantity,
     };
   });
-  const total = orderLines.reduce((s, x) => s + x.lineTotal, 0);
+  const subtotal = orderLines.reduce((s, x) => s + x.lineTotal, 0);
+  const deliveryFee = CHECKOUT_DELIVERY_FEE;
+  const total = subtotal + deliveryFee;
   const orderId = `BJ-${randomOrderSuffix()}`;
   const addrFirst = def.address.split("\n")[0].trim();
   const deliveryTitle = addrFirst.split(",")[0]?.trim() || "Your address";
+  const note = opts?.orderNote?.trim();
+  const addressBlock = def.address.replace(/\n/g, ", ") + (note ? `\n\nNote: ${note}` : "");
 
   const snap: OrderPlacedSnapshot = {
     orderId,
     lines: orderLines,
+    subtotal,
+    deliveryFee,
     total,
     deliveryTitle,
-    deliveryAddress: def.address.replace(/\n/g, ", "),
+    deliveryAddress: addressBlock,
     customerName: def.fullName.trim(),
     customerPhone: def.phone.trim(),
     placedAt: Date.now(),
@@ -84,9 +98,16 @@ export function readOrderPlacedSnapshot(): OrderPlacedSnapshot | null {
     if (!data || typeof data !== "object") return null;
     const o = data as Record<string, unknown>;
     if (typeof o.orderId !== "string" || !Array.isArray(o.lines) || typeof o.total !== "number") return null;
+    const lines = o.lines as OrderPlacedLine[];
+    const subtotalFromLines = lines.reduce((s, l) => s + l.lineTotal, 0);
+    const subtotal = typeof o.subtotal === "number" && Number.isFinite(o.subtotal) ? o.subtotal : subtotalFromLines;
+    const deliveryFee =
+      typeof o.deliveryFee === "number" && Number.isFinite(o.deliveryFee) ? o.deliveryFee : Math.max(0, o.total - subtotalFromLines);
     return {
       orderId: o.orderId,
-      lines: o.lines as OrderPlacedLine[],
+      lines,
+      subtotal,
+      deliveryFee,
       total: o.total,
       deliveryTitle: String(o.deliveryTitle ?? ""),
       deliveryAddress: String(o.deliveryAddress ?? ""),

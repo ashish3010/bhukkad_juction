@@ -10,10 +10,22 @@ import type { Product } from "@/shared/types/food";
 const stepBtn =
   "flex size-8 shrink-0 items-center justify-center rounded-full transition active:scale-95 disabled:opacity-50";
 
-type Props = { product: Product };
+type Props = {
+  product: Product;
+  /** Desktop / alternate label for the primary add action (default: `common.productCard.addToCart`). */
+  ctaLabel?: string;
+  /** Passed to `next/image` `sizes` for responsive loading. */
+  imageSizes?: string;
+};
 
-export const ProductCard = memo(function ProductCard({ product }: Props) {
-  const qty = useCartStore((s) => s.lines.find((l) => l.productId === product.id)?.quantity ?? 0);
+export const ProductCard = memo(function ProductCard({
+  product,
+  ctaLabel,
+  imageSizes,
+}: Props) {
+  const qty = useCartStore(
+    (s) => s.lines.find((l) => l.productId === product.id)?.quantity ?? 0,
+  );
   const add = useCartStore((s) => s.add);
   const setLineQuantity = useCartStore((s) => s.setLineQuantity);
 
@@ -37,15 +49,29 @@ export const ProductCard = memo(function ProductCard({ product }: Props) {
           alt={product.name}
           fill
           className="object-cover object-center"
-          sizes="(max-width:448px) 45vw, 200px"
+          sizes={imageSizes ?? "(max-width:448px) 45vw, 200px"}
         />
+        {product.bestseller ? (
+          <span
+            className="pointer-events-none absolute left-2 top-2 z-[1] rounded-md bg-[var(--bj-gold-fill)] px-2 py-1 text-[10px] font-bold uppercase leading-none tracking-wide text-[#1a1203] shadow-sm ring-1 ring-[var(--bj-gold)]/50"
+            role="status"
+          >
+            {common.productCard.bestsellerBadge}
+          </span>
+        ) : null}
       </div>
       <div className="space-y-2 p-3">
-        <p className="line-clamp-3 text-xs font-semibold leading-snug text-stone-800 dark:text-zinc-100">{product.name}</p>
+        <p className="line-clamp-3 text-xs font-semibold leading-snug text-stone-800 dark:text-zinc-100">
+          {product.name}
+        </p>
         {product.subtitle ? (
-          <p className="line-clamp-2 text-[11px] text-stone-500 dark:text-zinc-400">{product.subtitle}</p>
+          <p className="line-clamp-2 text-[11px] text-stone-500 dark:text-zinc-400">
+            {product.subtitle}
+          </p>
         ) : null}
-        <p className="text-sm font-bold text-[var(--bj-gold)]">{formatProductPrice(product)}</p>
+        <p className="text-sm font-bold text-[var(--bj-gold)]">
+          {formatProductPrice(product)}
+        </p>
         {qty === 0 ? (
           <Button
             type="button"
@@ -54,7 +80,7 @@ export const ProductCard = memo(function ProductCard({ product }: Props) {
             onClick={onAdd}
           >
             <IconPlus className="h-3.5 w-3.5" />
-            {common.productCard.addToCart}
+            {ctaLabel ?? common.productCard.addToCart}
           </Button>
         ) : (
           <div

@@ -8,8 +8,15 @@
     "areaServedName": "Gurugram",
     "areaServedAlternateName": "Gurgaon"
   },
+  "headerTopBar": {
+    "tagline": "Authentic hygienic home made food",
+    "orderPrefix": "Order:",
+    "phoneDisplay": "9873137335",
+    "phoneTel": "+919873137335"
+  },
   "nav": {
     "home": "Home",
+    "ourStory": "Our Story",
     "categories": "Categories",
     "orders": "Orders",
     "cart": "Cart",
@@ -44,7 +51,8 @@
     }
   },
   "productCard": {
-    "addToCart": "Add to cart"
+    "addToCart": "Add to cart",
+    "bestsellerBadge": "Bestseller"
   },
   "cart": {
     "yourSelection": "Your Selection",
@@ -52,7 +60,8 @@
     "eachSuffix": " each",
     "total": "Total",
     "continueToDelivery": "Continue to delivery",
-    "backToMenu": "Back to menu"
+    "backToMenu": "Back to menu",
+    "browseMenu": "Browse menu"
   },
   "checkout": {
     "stepCart": "Cart",
@@ -81,7 +90,9 @@
     "addNewAddress": "Add New Address",
     "defaultBadge": "Default",
     "placeOrder": "Place order",
-    "defaultDeliveryFootnote": "Default address is used for delivery · {siteName}"
+    "defaultDeliveryFootnote": "Default address is used for delivery · {siteName}",
+    "orderNoteOptional": "Order note (optional)",
+    "orderNotePlaceholder": "e.g. Extra spicy chokha please"
   },
   "orderPlaced": {
     "title": "Order Placed Successfully!",
@@ -89,6 +100,9 @@
     "orderIdLabel": "Order ID",
     "deliveryTo": "Delivery to",
     "orderSummary": "Order summary",
+    "subtotal": "Subtotal",
+    "deliveryCharge": "Delivery charge",
+    "taxesFees": "Taxes & fees",
     "totalAmount": "Total Amount",
     "backToHome": "Back to Home"
   },
@@ -106,13 +120,17 @@
     "emptyTitle": "No orders yet",
     "emptyBody": "Place an order from the menu — it will show up here.",
     "browseMenu": "Browse menu",
-    "historyHeading": "Order history",
     "delivered": "Delivered",
-    "reorder": "Re-order"
+    "reorder": "Re-order",
+    "viewMore": "View more",
+    "viewLess": "View less"
   },
   "telegram": {
     "lineItem": "• {name} × {qty} — ₹{lineTotal}",
     "newOrder": "New order {orderId}",
+    "subtotalLine": "Subtotal: ₹{subtotal}",
+    "deliveryLine": "Delivery: ₹{fee}",
+    "taxesLine": "Taxes & fees: ₹{taxes}",
     "totalLine": "Total: ₹{total}",
     "customer": "Customer: {name}",
     "phone": "Phone: {phone}",
@@ -127,5 +145,94 @@
     "logIn": "Log In",
     "alreadyMember": "Already a member?",
     "getStarted": "Get Started"
+  },
+  "desktop": {
+    "nav": {
+      "menu": "Menu"
+    },
+    "ourStoryPage": {
+      "documentTitle": "Our Story | The Bhukkad Junction"
+    },
+    "hero": {
+      "eyebrow": "AUTHENTIC BIHARI SOUL",
+      "headingLine1": "Culinary Traditions",
+      "headingLine2": "Redefined.",
+      "body": "The Bhukkad Junction brings you the rustic elegance of Bihari cuisine. Experience the smoky depths of Litti Chokha and the vibrant spice of our heritage recipes, crafted for the modern palate.",
+      "exploreMenu": "Explore Menu",
+      "ourStory": "Our Story"
+    },
+    "ourStorySection": {
+      "block1Title": "Best Litti Chokha, Paratha & Snacking Munching in Gurugram",
+      "block1Body": "The Bhukkad Junction is a home style kitchen in Gurugram known for authentic Bihari Litti Chokha, Sattu Paratha, Aalu Paratha and tasty snacks. If you are searching for homemade food in Gurugram or Litti Chokha near me, The Bhukkad Junction offers fresh hygienic food with authentic desi taste.",
+      "block2Title": "Bihari Food & Paratha in Gurugram",
+      "block2Paragraph1": "If you are looking for authentic **Litti Chokha in Gurugram**, The Bhukkad Junction brings traditional Bihari flavours to your plate. We serve fresh homemade food including **Sattu Paratha, Aalu Paratha, Paneer Paratha** and delicious snacks prepared with hygienic ingredients.",
+      "block2Paragraph2": "Located in **Gurugram Sector 107**, The Bhukkad Junction is known for home style cooking and authentic desi taste. Whether you are searching for **Bihari food in Gurgaon, paratha near me** or **homemade food in Gurugram**, we deliver fresh and tasty meals directly to your doorstep.",
+      "mapHeading": "Find us on the map",
+      "mapOpenExternal": "Open in Google Maps",
+      "reviewsHeading": "Customer Reviews",
+      "reviews": [
+        {
+          "stars": 4,
+          "quote": "Very authentic taste. Litti Chokha was amazing.",
+          "name": "Rahul Sharma"
+        },
+        {
+          "stars": 5,
+          "quote": "Best home style food in Gurgaon.",
+          "name": "Neha Verma"
+        },
+        {
+          "stars": 4,
+          "quote": "Maggi and sandwiches were very tasty.",
+          "name": "Amit Kumar"
+        }
+      ]
+    },
+    "explore": {
+      "title": "Explore Menu",
+      "tagline": "Bihari Swad, Asli Andaz!",
+      "filtersTitle": "Filters",
+      "filtersSubtitle": "Browse the full menu or a category",
+      "filterAll": "All items",
+      "quickAdd": "Quick Add"
+    },
+    "ordersDashboard": {
+      "pageTitle": "Order Dashboard",
+      "pageSubtitle": "Your last 20 orders stored on this device.",
+      "browseMenu": "Browse menu",
+      "colDate": "Date",
+      "colItems": "Item summary",
+      "colStatus": "Status",
+      "colTotal": "Total",
+      "colActions": "Actions",
+      "viewAllOrders": "View all orders"
+    },
+    "cartPage": {
+      "summaryAsideTitle": "Order summary"
+    },
+    "finalize": {
+      "pageTitle": "Finalize Order",
+      "pageSubtitle": "One step away from Bihar's finest culinary magic.",
+      "deliveryDetails": "Delivery Details",
+      "paymentMethod": "Payment Method",
+      "orderSummary": "Order Summary",
+      "payWhatsappTitle": "Order on WhatsApp",
+      "payWhatsappSubtitle": "Recommended for fastest delivery",
+      "payCardTitle": "Credit / Debit Card",
+      "payCardSubtitle": "Secure checkout powered by Stripe",
+      "payCodTitle": "Cash on Delivery",
+      "payCodSubtitle": "Pay when your food arrives",
+      "paymentComingSoon": "Coming soon",
+      "secureNote": "All transactions are secure and encrypted.",
+      "proceedWhatsapp": "Proceed to WhatsApp Order",
+      "lineOptionLabel": "{label} × {qty}",
+      "lineItemEdit": "Edit",
+      "editCart": "Edit",
+      "couponCode": "Coupon code",
+      "couponApply": "Apply",
+      "couponHint": "Coupons are not available yet.",
+      "tastesCaption": "Authentic Bihar Flavors",
+      "tastesImageAlt": "Traditional kitchen"
+    }
   }
 }

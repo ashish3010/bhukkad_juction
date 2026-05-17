@@ -35,10 +35,27 @@ function parseSnapshot(body: unknown): OrderPlacedSnapshot | null {
   if (typeof o.placedAt !== "number" || !Number.isFinite(o.placedAt)) return null;
   if (!Array.isArray(o.lines) || o.lines.length === 0 || o.lines.length > MAX_LINES) return null;
   if (!o.lines.every(isOrderLine)) return null;
+
+  const lines = o.lines as OrderPlacedLine[];
+  const subtotalFromLines = lines.reduce((s, l) => s + l.lineTotal, 0);
+  const subtotal =
+    typeof o.subtotal === "number" && Number.isFinite(o.subtotal) && o.subtotal >= 0 ? o.subtotal : subtotalFromLines;
+  const deliveryFee =
+    typeof o.deliveryFee === "number" && Number.isFinite(o.deliveryFee) && o.deliveryFee >= 0
+      ? o.deliveryFee
+      : Math.max(0, o.total - subtotalFromLines);
+
+  const total = o.total;
+  const matchesLines = Math.abs(total - subtotalFromLines) < 0.5;
+  const matchesBreakdown = Math.abs(total - (subtotal + deliveryFee)) < 0.5;
+  if (!matchesLines && !matchesBreakdown) return null;
+
   return {
     orderId: o.orderId,
-    lines: o.lines as OrderPlacedLine[],
-    total: o.total,
+    lines,
+    subtotal,
+    deliveryFee,
+    total,
     deliveryTitle: o.deliveryTitle,
     deliveryAddress: o.deliveryAddress,
     customerName: o.customerName,
@@ -58,9 +75,16 @@ function formatOrderMessage(s: OrderPlacedSnapshot): string {
       }),
     )
     .join("\n");
+  const moneyLines: string[] = [
+    replaceCopy(t.subtotalLine, { subtotal: s.subtotal }),
+    replaceCopy(t.deliveryLine, { fee: s.deliveryFee }),
+    replaceCopy(t.taxesLine, { taxes: 0 }),
+    replaceCopy(t.totalLine, { total: s.total }),
+  ];
   return [
     replaceCopy(t.newOrder, { orderId: s.orderId }),
-    replaceCopy(t.totalLine, { total: s.total }),
+    "",
+    ...moneyLines,
     "",
     lineText,
     "",
