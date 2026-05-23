@@ -13,6 +13,8 @@ import {
   absoluteSiteUrl,
   restaurantJsonLd,
 } from "@/shared/site-meta";
+import { VercelAnalytics } from "@/features/analytics/VercelAnalytics";
+import { VercelSpeedInsights } from "@/features/analytics/VercelSpeedInsights";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -70,6 +72,8 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <div className={`${poppins.variable} min-h-screen font-sans antialiased`}>
         <ThemeProvider>
+          <VercelAnalytics />
+          <VercelSpeedInsights />
           <LcpHeroPreload />
           <Component {...pageProps} />
         </ThemeProvider>
