@@ -39,7 +39,7 @@ export function MenuDataProvider({
     void (async () => {
       if (isLocalPublicJsonMode()) {
         try {
-          const res = await fetch(STATIC_MENU_URL, { cache: "no-store" });
+          const res = await fetch(STATIC_MENU_URL, { cache: "default" });
           if (res.ok) {
             const json: unknown = await res.json();
             if (apply(json)) return;
@@ -52,7 +52,7 @@ export function MenuDataProvider({
 
       for (const url of remoteMenuFetchUrls()) {
         try {
-          const res = await fetch(url, { cache: "no-store" });
+          const res = await fetch(url, { cache: "default" });
           if (res.ok) {
             const json: unknown = await res.json();
             if (apply(json)) return;
@@ -62,7 +62,7 @@ export function MenuDataProvider({
         }
       }
       try {
-        const res = await fetch(STATIC_MENU_URL, { cache: "no-store" });
+        const res = await fetch(STATIC_MENU_URL, { cache: "default" });
         if (res.ok) {
           const json: unknown = await res.json();
           if (apply(json)) return;

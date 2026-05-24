@@ -117,6 +117,7 @@ export function resolveImageSrc(
 
 /**
  * Maps `/animation/foo.lottie` → `{root}/animations/foo.lottie` (same assets root as images).
+ * Browser caching follows your CDN / origin `Cache-Control` on that URL — set long `max-age` on `.lottie` at the host.
  */
 export function resolveAnimationSrc(
   src: string,

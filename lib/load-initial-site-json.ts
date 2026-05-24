@@ -1,4 +1,5 @@
 import type { IncomingMessage } from "http";
+import { siteJsonUpstreamRevalidateSeconds } from "@/lib/site-asset-cache";
 import { fetchCommonJsonFromUpstream, fetchMenuJsonFromUpstream } from "@/lib/site-json-upstream-fetch";
 import type { CommonCopy } from "@/shared/data/common";
 import { isLocalPublicJsonMode, isLocalPublicJsonModeOnServer } from "@/shared/data/local-json-mode";
@@ -24,7 +25,14 @@ function requestOrigin(req?: IncomingMessage): string | null {
 
 async function fetchJson(url: string): Promise<unknown | null> {
   try {
-    const res = await fetch(url, { cache: "no-store" });
+    const init =
+      typeof window === "undefined"
+        ? ({
+            cache: "default" as const,
+            next: { revalidate: siteJsonUpstreamRevalidateSeconds() },
+          } as RequestInit)
+        : ({ cache: "default" as const } satisfies RequestInit);
+    const res = await fetch(url, init);
     if (!res.ok) return null;
     return (await res.json()) as unknown;
   } catch {

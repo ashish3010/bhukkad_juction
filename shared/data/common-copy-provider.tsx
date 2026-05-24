@@ -37,7 +37,7 @@ export function CommonCopyProvider({
     void (async () => {
       if (isLocalPublicJsonMode()) {
         try {
-          const res = await fetch(STATIC_COMMON_URL, { cache: "no-store" });
+          const res = await fetch(STATIC_COMMON_URL, { cache: "default" });
           if (res.ok) {
             const json: unknown = await res.json();
             if (apply(json)) return;
@@ -50,7 +50,7 @@ export function CommonCopyProvider({
 
       for (const url of remoteCommonFetchUrls()) {
         try {
-          const res = await fetch(url, { cache: "no-store" });
+          const res = await fetch(url, { cache: "default" });
           if (res.ok) {
             const json: unknown = await res.json();
             if (apply(json)) return;
@@ -60,7 +60,7 @@ export function CommonCopyProvider({
         }
       }
       try {
-        const res = await fetch(STATIC_COMMON_URL, { cache: "no-store" });
+        const res = await fetch(STATIC_COMMON_URL, { cache: "default" });
         if (res.ok) {
           const json: unknown = await res.json();
           if (apply(json)) return;

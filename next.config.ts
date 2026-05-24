@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import {
+  nextImageMinimumCacheTtlSeconds,
+  staticSiteJsonCacheControl,
+} from "./lib/site-asset-cache";
 
 const productionSite =
   process.env.NEXT_PUBLIC_PRODUCTION_SITE_ORIGIN?.replace(/\/$/, "") ||
@@ -48,7 +52,21 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: nextImageMinimumCacheTtlSeconds(),
     ...(imageRemote ? { remotePatterns: [imageRemote] } : {}),
+  },
+  async headers() {
+    const longLocalAssets = "public, max-age=86400, stale-while-revalidate=604800";
+    return [
+      {
+        source: "/static/:path*",
+        headers: [{ key: "Cache-Control", value: staticSiteJsonCacheControl() }],
+      },
+      {
+        source: "/images/:path*",
+        headers: [{ key: "Cache-Control", value: longLocalAssets }],
+      },
+    ];
   },
   compiler: {
     /** Strip `console.*` from production client & server bundles (dev unchanged). */

@@ -1,11 +1,13 @@
 import { productionSiteOrigin } from "@/lib/site-json-upstream";
+import { siteJsonUpstreamFetchInit } from "@/lib/site-asset-cache";
 
 async function fetchJsonFromUrls(urls: string[], bearer?: string): Promise<unknown | null> {
   const headers: Record<string, string> = { Accept: "application/json" };
   if (bearer) headers.Authorization = `Bearer ${bearer}`;
+  const init = siteJsonUpstreamFetchInit(headers);
   for (const url of urls) {
     try {
-      const res = await fetch(url, { headers, cache: "no-store" });
+      const res = await fetch(url, init);
       if (!res.ok) continue;
       return (await res.json()) as unknown;
     } catch {
