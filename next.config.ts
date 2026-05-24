@@ -8,16 +8,15 @@ const productionSite =
   process.env.NEXT_PUBLIC_PRODUCTION_SITE_ORIGIN?.replace(/\/$/, "") ||
   "https://thebhukkadjunction.com";
 
-/** `next/image` remote host/path — same default as `resolveImageSrc` (`{productionSite}/assets`). */
+/** `next/image` allowlist: host/path parsed from **`NEXT_PUBLIC_IMAGE_ASSETS_SUFFIX`** when it is an absolute URL. */
 function imageAssetsRemotePattern():
   | { protocol: "http" | "https"; hostname: string; pathname: string }
   | null {
-  const raw =
-    process.env.NEXT_PUBLIC_IMAGE_ASSETS_BASE?.trim() ||
-    process.env.NEXT_PUBLIC_ASSETS_IMAGES_BASE?.trim() ||
-    `${productionSite}/assets`;
+  const raw = process.env.NEXT_PUBLIC_IMAGE_ASSETS_SUFFIX?.trim() || "";
+  if (!raw || /^[?&]/.test(raw) || raw.includes("=")) return null;
+  if (!/^https?:\/\//i.test(raw)) return null;
   try {
-    const url = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
+    const url = new URL(raw);
     const pathname = url.pathname.replace(/\/$/, "") || "";
     return {
       protocol: url.protocol === "http:" ? "http" : "https",

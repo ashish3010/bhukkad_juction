@@ -13,11 +13,13 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Copy **`.env.example`** to **`.env.local`** when you need the flags documented there.
 
-## Images & animations (CDN vs `public/`)
+## Images & animations
 
-`/images/…` and `/animation/…` resolve to **`{NEXT_PUBLIC_PRODUCTION_SITE_ORIGIN}/assets/images/…`** and **`…/assets/animations/…`** by default (override base with `NEXT_PUBLIC_IMAGE_ASSETS_BASE`).
+`/images/…` resolves to **`{NEXT_PUBLIC_IMAGE_ASSETS_SUFFIX}/images/…`** (and **`…/animations/…`** for `/animation/…`). Set the suffix to your CDN base URL or path prefix (no extra production-site base is applied in code). Use **`NEXT_PUBLIC_…`** so the client can build URLs.
 
-To use **`public/images`** (and local animation files) during **`next dev`** / localhost, set **`NEXT_PUBLIC_USE_LOCAL_PUBLIC_IMAGES=1`**.
+If the suffix is unset, images stay as same-origin **`/images/…`**.
+
+To use **`public/images`** during local JSON dev mode, set **`NEXT_PUBLIC_USE_LOCAL_PUBLIC_IMAGES=1`**.
 
 ## Site JSON (`common.json` / `menu.json`)
 
