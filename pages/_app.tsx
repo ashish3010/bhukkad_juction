@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
-import type { AppProps } from "next/app";
+import NextApp from "next/app";
+import type { AppContext, AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Poppins } from "next/font/google";
@@ -13,8 +14,14 @@ import {
   absoluteSiteUrl,
   restaurantJsonLd,
 } from "@/shared/site-meta";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import { VercelAnalytics } from "@/features/analytics/VercelAnalytics";
 import { VercelSpeedInsights } from "@/features/analytics/VercelSpeedInsights";
+import { CommonCopyProvider } from "@/shared/data/common-copy-provider";
+import { MenuDataProvider } from "@/shared/data/menu-data-provider";
+import { loadInitialSiteJson } from "@/lib/load-initial-site-json";
+import type { CommonCopy } from "@/shared/data/common";
+import type { SiteMenuPayload } from "@/shared/data/site-json-payload";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,20 +33,26 @@ const themeBootstrap = `!function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY
 
 const LCP_HERO_SRC = "/images/landing-hero.png";
 
+type PagePropsWithSiteJson = AppProps["pageProps"] & {
+  __initialCommon?: CommonCopy | null;
+  __initialMenu?: SiteMenuPayload | null;
+};
+
 /** Preload menu hero so the LCP image is discoverable from HTML early (Lighthouse “LCP request discovery”). */
 function LcpHeroPreload() {
   const { pathname } = useRouter();
   if (pathname !== "/" && pathname !== "/home") return null;
   return (
     <Head>
-      <link rel="preload" href={LCP_HERO_SRC} as="image" type="image/png" />
+      <link rel="preload" href={resolveImageSrc(LCP_HERO_SRC)} as="image" type="image/png" />
     </Head>
   );
 }
 
-export default function App({ Component, pageProps }: AppProps) {
+function BhukkadApp({ Component, pageProps }: AppProps) {
+  const { __initialCommon, __initialMenu, ...componentPageProps } = pageProps as PagePropsWithSiteJson;
   const canonical = absoluteSiteUrl("/");
-  const ogImage = absoluteSiteUrl(LOGO_PATH);
+  const ogImage = absoluteSiteUrl(resolveImageSrc(LOGO_PATH, { preferRemoteAssets: true }));
 
   return (
     <>
@@ -72,12 +85,31 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <div className={`${poppins.variable} min-h-screen font-sans antialiased`}>
         <ThemeProvider>
-          <VercelAnalytics />
-          <VercelSpeedInsights />
-          <LcpHeroPreload />
-          <Component {...pageProps} />
+          <CommonCopyProvider initialCommon={__initialCommon}>
+            <MenuDataProvider initialMenu={__initialMenu}>
+              <VercelAnalytics />
+              <VercelSpeedInsights />
+              <LcpHeroPreload />
+              <Component {...componentPageProps} />
+            </MenuDataProvider>
+          </CommonCopyProvider>
         </ThemeProvider>
       </div>
     </>
   );
 }
+
+BhukkadApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await NextApp.getInitialProps(appContext);
+  const { common, menu } = await loadInitialSiteJson(appContext.ctx.req);
+  return {
+    ...appProps,
+    pageProps: {
+      ...appProps.pageProps,
+      __initialCommon: common,
+      __initialMenu: menu,
+    },
+  };
+};
+
+export default BhukkadApp;

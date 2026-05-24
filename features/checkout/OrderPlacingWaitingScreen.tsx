@@ -4,11 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useCartStore } from "@/features/cart/cart-store";
 import { readOrderPlacedSnapshot } from "@/features/checkout/order-placed-snapshot";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { resolveAnimationSrc } from "@/shared/resolve-image-src";
 
 const LOTTIE_SRC = "/animation/Success.lottie";
 
 export function OrderPlacingWaitingScreen() {
+  const common = useCommon();
   const router = useRouter();
   const clear = useCartStore((s) => s.clear);
   const [dotLottie, setDotLottie] = useState<DotLottie | null>(null);
@@ -51,7 +53,7 @@ export function OrderPlacingWaitingScreen() {
     <div className="flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-amber-50 via-[var(--bj-bg)] to-stone-100 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] dark:from-zinc-950 dark:via-[var(--bj-bg)] dark:to-zinc-950">
       <div className="relative flex h-[min(20rem,calc(100vw-2rem))] w-[min(20rem,calc(100vw-2rem))] shrink-0 items-center justify-center sm:h-80 sm:w-80">
         <DotLottieReact
-          src={LOTTIE_SRC}
+          src={resolveAnimationSrc(LOTTIE_SRC)}
           loop={false}
           autoplay
           backgroundColor="transparent"

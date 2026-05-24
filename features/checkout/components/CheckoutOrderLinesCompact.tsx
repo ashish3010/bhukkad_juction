@@ -2,8 +2,10 @@ import Image from "next/image";
 import { memo, useCallback } from "react";
 import { IconMinus, IconPlus } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
-import { common, replaceCopy } from "@/shared/data/common";
-import { getProductById } from "@/shared/data/menu";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { replaceCopy } from "@/shared/data/common";
+import { useMenuStore } from "@/shared/data/menu";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import type { CartLine, Product } from "@/shared/types/food";
 
 const stepBtn =
@@ -12,6 +14,7 @@ const stepBtn =
 type LineProps = { line: CartLine; product: Product };
 
 const CompactLineRow = memo(function CompactLineRow({ line, product }: LineProps) {
+  const common = useCommon();
   const setLineQuantity = useCartStore((s) => s.setLineQuantity);
   const lineTotal = product.price * line.quantity;
 
@@ -26,7 +29,7 @@ const CompactLineRow = memo(function CompactLineRow({ line, product }: LineProps
   return (
     <li className="flex gap-3 border-b border-stone-200/90 pb-3 last:border-b-0 last:pb-0 dark:border-zinc-700/90">
       <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-stone-100 dark:bg-zinc-800">
-        <Image src={product.image} alt="" fill className="object-cover object-center" sizes="56px" />
+        <Image src={resolveImageSrc(product.image)} alt="" fill className="object-cover object-center" sizes="56px" />
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <p className="text-sm font-semibold leading-snug text-stone-900 dark:text-zinc-100">{product.name}</p>
@@ -69,12 +72,13 @@ const CompactLineRow = memo(function CompactLineRow({ line, product }: LineProps
 });
 
 export function CheckoutOrderLinesCompact() {
+  const products = useMenuStore((s) => s.products);
   const lines = useCartStore((s) => s.lines);
 
   return (
     <ul className="space-y-3">
       {lines.map((line) => {
-        const product = getProductById(line.productId);
+        const product = products.find((p) => p.id === line.productId);
         if (!product) return null;
         return <CompactLineRow key={line.productId} line={line} product={product} />;
       })}

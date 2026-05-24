@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { memo } from "react";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import type { Category } from "@/shared/types/food";
 
 type Props = { categories: Category[] };
 
 export const CategoryRail = memo(function CategoryRail({ categories }: Props) {
+  const common = useCommon();
   return (
     <section id="categories" className="pb-6">
       <div className="mb-3 px-4">
@@ -20,7 +22,7 @@ export const CategoryRail = memo(function CategoryRail({ categories }: Props) {
           >
             <div className="relative mx-auto box-border h-16 w-16 overflow-hidden rounded-full border-2 border-[var(--bj-gold)]/40">
               <Image
-                src={c.image}
+                src={resolveImageSrc(c.image)}
                 alt={c.name}
                 fill
                 className="rounded-full object-cover object-[center_44%]"

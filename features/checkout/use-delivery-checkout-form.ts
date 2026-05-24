@@ -6,7 +6,7 @@ import {
   type SavedAddressEntry,
   upsertAddressFromForm,
 } from "@/features/checkout/delivery-address-storage";
-import { getProductById } from "@/shared/data/menu";
+import { getProductById, useMenuStore } from "@/shared/data/menu";
 
 /** Strip non-digits; if value looks like 91 + 10 digits, keep the last 10. Cap at 10 digits for storage. */
 export function normalizePhoneDigits(raw: string): string {
@@ -19,6 +19,7 @@ export function useDeliveryCheckoutForm(
   editingEntry: SavedAddressEntry | null,
 ) {
   const { lines } = useCart();
+  const products = useMenuStore((s) => s.products);
   const [fullName, setFullName] = useState(() => editingEntry?.fullName ?? "");
   const [phone, setPhone] = useState(() =>
     normalizePhoneDigits(editingEntry?.phone ?? ""),
@@ -52,7 +53,7 @@ export function useDeliveryCheckoutForm(
       const p = getProductById(line.productId);
       return sum + (p ? p.price * line.quantity : 0);
     }, 0);
-  }, [lines]);
+  }, [lines, products]);
 
   const setPhoneNormalized = useCallback((raw: string) => {
     setPhone(normalizePhoneDigits(raw));

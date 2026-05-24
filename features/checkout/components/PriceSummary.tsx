@@ -1,11 +1,12 @@
 import { Card } from "@/shared/components/ui/Card";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 
 type Props = {
   total: number;
 };
 
 export function PriceSummary({ total }: Props) {
+  const common = useCommon();
   return (
     <section className="px-4 pt-6 min-[601px]:px-0 min-[601px]:pt-4">
       <Card className="p-4">

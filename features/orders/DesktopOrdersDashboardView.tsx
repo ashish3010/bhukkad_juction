@@ -6,8 +6,9 @@ import { readOrderHistory, type StoredOrder } from "@/features/orders/order-hist
 import { OrderItemsSummaryCollapsible } from "@/features/orders/components/OrderItemsSummaryCollapsible";
 import { useCartStore } from "@/features/cart/cart-store";
 import { IconCheck } from "@/shared/components/icons";
-import { common } from "@/shared/data/common";
-import { getProductById } from "@/shared/data/menu";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
+import { getProductById, useMenuStore } from "@/shared/data/menu";
 
 const FALLBACK_THUMB = "/images/litti_chokha.png";
 const ORDERS_PAGE_SIZE = 5;
@@ -29,6 +30,8 @@ function lineSummary(order: StoredOrder): string {
 }
 
 export function DesktopOrdersDashboardView() {
+  const common = useCommon();
+  const products = useMenuStore((s) => s.products);
   const d = common.desktop.ordersDashboard;
   const router = useRouter();
   const add = useCartStore((s) => s.add);
@@ -68,7 +71,7 @@ export function DesktopOrdersDashboardView() {
       }
       void router.push("/order-summary");
     },
-    [add, router],
+    [add, router, products],
   );
 
   const visibleOrders = orders.slice(0, visibleCount);
@@ -137,7 +140,7 @@ export function DesktopOrdersDashboardView() {
                         <div className="flex min-w-0 flex-1 items-start gap-3">
                           <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-stone-100 ring-1 ring-stone-200/80 dark:bg-zinc-800 dark:ring-zinc-700">
                             <Image
-                              src={order.previewImage || FALLBACK_THUMB}
+                              src={resolveImageSrc(order.previewImage || FALLBACK_THUMB)}
                               alt=""
                               fill
                               className="object-cover"

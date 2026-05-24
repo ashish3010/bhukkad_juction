@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 
 type Props = {
   text: string;
@@ -17,6 +17,7 @@ export function OrderItemsSummaryCollapsible({
   textClassName,
   inlineWithThumbnail = true,
 }: Props) {
+  const common = useCommon();
   const [expanded, setExpanded] = useState(false);
   const [lineTruncates, setLineTruncates] = useState(false);
   const lineRef = useRef<HTMLParagraphElement>(null);

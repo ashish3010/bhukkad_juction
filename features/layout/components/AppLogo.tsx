@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import { LOGO_PATH, SITE_NAME } from "@/shared/site-meta";
 
 type Props = {
@@ -24,7 +25,7 @@ export function AppLogo({
 }: Props) {
   const image = (
     <Image
-      src={LOGO_PATH}
+      src={resolveImageSrc(LOGO_PATH)}
       alt={decorative ? "" : `${SITE_NAME} logo`}
       width={width}
       height={width}

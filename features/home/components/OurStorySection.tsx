@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 import {
   GOOGLE_MAPS_EMBED_SRC,
   GOOGLE_MAPS_PLACE_URL,
@@ -40,6 +40,7 @@ function StarRow({ stars }: { stars: number }) {
 }
 
 export function OurStorySection() {
+  const common = useCommon();
   const s = common.desktop.ourStorySection;
 
   return (

@@ -1,16 +1,17 @@
-import { CATEGORIES, getProductsByCategory } from "@/shared/data/menu";
+import { getProductsByCategory, useMenuStore } from "@/shared/data/menu";
 import { CategoryRail } from "@/features/home/components/CategoryRail";
 import { ProductCard } from "@/features/home/components/ProductCard";
 import { PromoHero } from "@/features/home/components/PromoHero";
 import { DesktopHomeView } from "@/features/home/DesktopHomeView";
 
 export function HomeScreen() {
+  const categories = useMenuStore((s) => s.categories);
   return (
     <>
       <div className="space-y-2 pb-4 desktop:hidden">
         <PromoHero />
-        <CategoryRail categories={CATEGORIES} />
-        {CATEGORIES.map((cat) => {
+        <CategoryRail categories={categories} />
+        {categories.map((cat) => {
           const items = getProductsByCategory(cat.id);
           if (items.length === 0) return null;
           return (

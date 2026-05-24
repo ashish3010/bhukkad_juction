@@ -6,7 +6,8 @@ import { CheckoutStepper } from "@/features/checkout/components/CheckoutStepper"
 import { DesktopFinalizeCheckoutView } from "@/features/checkout/DesktopFinalizeCheckoutView";
 import { useDeliveryCheckoutForm } from "@/features/checkout/use-delivery-checkout-form";
 import { Button } from "@/shared/components/ui/Button";
-import { common, replaceCopy } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { replaceCopy } from "@/shared/data/common";
 import { SITE_NAME } from "@/shared/site-meta";
 import {
   type SavedAddressEntry,
@@ -43,6 +44,7 @@ export function DeliveryAddressForm({
   hidePaymentAndCouponOnDesktop = false,
   editCartHref = "/order-summary",
 }: Props) {
+  const common = useCommon();
   const router = useRouter();
   const { lines } = useCart();
   const c = common.checkout;

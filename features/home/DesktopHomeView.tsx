@@ -5,8 +5,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProductCard } from "@/features/home/components/ProductCard";
 import { IconGrid } from "@/shared/components/icons";
 import { Button } from "@/shared/components/ui/Button";
-import { common } from "@/shared/data/common";
-import { CATEGORIES, getProductsByCategory, PRODUCTS } from "@/shared/data/menu";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { getProductsByCategory, useMenuStore } from "@/shared/data/menu";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import type { Product } from "@/shared/types/food";
 
 type ActiveNav = "all" | string;
@@ -20,6 +21,9 @@ function applySearch(products: Product[], q: string): Product[] {
 }
 
 export function DesktopHomeView() {
+  const common = useCommon();
+  const categories = useMenuStore((s) => s.categories);
+  const products = useMenuStore((s) => s.products);
   const router = useRouter();
   const d = common.desktop;
   const explore = d.explore;
@@ -28,14 +32,14 @@ export function DesktopHomeView() {
 
   const searchQ = typeof router.query.q === "string" ? router.query.q : "";
 
-  const baseList = useMemo(() => applySearch(PRODUCTS, searchQ), [searchQ]);
+  const baseList = useMemo(() => applySearch(products, searchQ), [products, searchQ]);
 
   const categoriesOnMenu = useMemo(
     () =>
-      CATEGORIES.filter((c) =>
+      categories.filter((c) =>
         getProductsByCategory(c.id).some((p) => baseList.some((x) => x.id === p.id)),
       ),
-    [baseList],
+    [categories, baseList],
   );
 
   const resolvedNav = useMemo<ActiveNav>(() => {
@@ -51,8 +55,8 @@ export function DesktopHomeView() {
   const showSectionedMenu = resolvedNav === "all" && !searchQ.trim();
 
   const activeCategory = useMemo(
-    () => (resolvedNav === "all" ? undefined : CATEGORIES.find((c) => c.id === resolvedNav)),
-    [resolvedNav],
+    () => (resolvedNav === "all" ? undefined : categories.find((c) => c.id === resolvedNav)),
+    [resolvedNav, categories],
   );
 
   const scrollToMenu = useCallback(() => {
@@ -97,7 +101,7 @@ export function DesktopHomeView() {
           <div className="relative z-10 mx-auto aspect-[4/3] w-full max-w-lg desktop:mx-0 desktop:max-w-none">
             <div className="relative h-full min-h-[280px] overflow-hidden rounded-3xl ring-1 ring-stone-200/80 dark:ring-zinc-700/80 desktop:min-h-[360px]">
               <Image
-                src="/images/landing-hero.png"
+                src={resolveImageSrc("/images/landing-hero.png")}
                 alt={common.home.promoHero.imageAlt}
                 fill
                 className="object-cover object-center"
@@ -156,7 +160,7 @@ export function DesktopHomeView() {
                   >
                     <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-[var(--bj-gold)]/40">
                       <Image
-                        src={cat.image}
+                        src={resolveImageSrc(cat.image)}
                         alt=""
                         fill
                         className="object-cover object-[center_44%]"
@@ -180,7 +184,7 @@ export function DesktopHomeView() {
 
             {showSectionedMenu ? (
               <div className="mt-10 space-y-14">
-                {CATEGORIES.map((cat) => {
+                {categories.map((cat) => {
                   const items = getProductsByCategory(cat.id).filter((p) => baseList.some((x) => x.id === p.id));
                   if (items.length === 0) return null;
                   return (

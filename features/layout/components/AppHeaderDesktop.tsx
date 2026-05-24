@@ -6,10 +6,12 @@ import { useCartStore } from "@/features/cart/cart-store";
 import { useTheme } from "@/features/theme/theme-context";
 import { AppHeaderTopContact } from "@/features/layout/components/AppHeaderTopContact";
 import { AppLogo } from "@/features/layout/components/AppLogo";
-import { common, replaceCopy } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { replaceCopy } from "@/shared/data/common";
 import { SITE_NAME } from "@/shared/site-meta";
 
 export function AppHeaderDesktop() {
+  const common = useCommon();
   const router = useRouter();
   const totalCount = useCartStore((s) => s.lines.reduce((sum, l) => sum + l.quantity, 0));
   const { theme, setTheme } = useTheme();

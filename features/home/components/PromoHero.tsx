@@ -1,16 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/components/ui/Button";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 
 export function PromoHero() {
+  const common = useCommon();
   const h = common.home.promoHero;
   return (
     <div className="px-4 pb-6 pt-2">
       <div className="relative overflow-hidden rounded-3xl ring-1 ring-stone-200 shadow-sm dark:ring-zinc-800">
         <div className="relative aspect-[16/10] w-full">
           <Image
-            src="/images/landing-hero.png"
+            src={resolveImageSrc("/images/landing-hero.png")}
             alt={h.imageAlt}
             fill
             className="object-cover"

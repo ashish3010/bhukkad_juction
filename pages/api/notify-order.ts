@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { OrderPlacedLine, OrderPlacedSnapshot } from "@/features/checkout/order-placed-snapshot";
 import { sendTelegramMessage } from "@/lib/telegram";
-import { common, replaceCopy } from "@/shared/data/common";
+import { commonLocal, replaceCopy } from "@/shared/data/common";
 
 const MAX_LINES = 80;
 const MAX_STR = 2000;
@@ -65,7 +65,7 @@ function parseSnapshot(body: unknown): OrderPlacedSnapshot | null {
 }
 
 function formatOrderMessage(s: OrderPlacedSnapshot): string {
-  const t = common.telegram;
+  const t = commonLocal.telegram;
   const lineText = s.lines
     .map((l) =>
       replaceCopy(t.lineItem, {

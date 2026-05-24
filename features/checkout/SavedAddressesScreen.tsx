@@ -5,9 +5,10 @@ import { SelectionList } from "@/features/checkout/components/SelectionList";
 import { setDefaultAddress, type SavedAddressEntry } from "@/features/checkout/delivery-address-storage";
 import { Button } from "@/shared/components/ui/Button";
 import { useCartStore } from "@/features/cart/cart-store";
-import { common, replaceCopy } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { replaceCopy, type CommonCopy } from "@/shared/data/common";
 import { SITE_NAME } from "@/shared/site-meta";
-import { getProductById } from "@/shared/data/menu";
+import { getProductById, useMenuStore } from "@/shared/data/menu";
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -28,8 +29,8 @@ type Props = {
   onPlaceOrder: () => void;
 };
 
-function kindTitle(e: SavedAddressEntry): string {
-  const c = common.checkout;
+function kindTitle(e: SavedAddressEntry, checkout: CommonCopy["checkout"]): string {
+  const c = checkout;
   if (e.kind === "home") return c.addressKindHome;
   if (e.kind === "work") return c.addressKindWork;
   return e.customLabel ? replaceCopy(c.addressKindOtherWithLabel, { label: e.customLabel }) : c.addressKindOther;
@@ -45,6 +46,8 @@ const card =
   "rounded-2xl border border-stone-200/80 bg-[var(--bj-card)] p-5 shadow-sm dark:border-zinc-800/80 dark:shadow-none";
 
 export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onPlaceOrder }: Props) {
+  const common = useCommon();
+  const products = useMenuStore((s) => s.products);
   const lines = useCartStore((s) => s.lines);
   const lineCount = lines.length;
 
@@ -53,7 +56,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
       const p = getProductById(line.productId);
       return sum + (p ? p.price * line.quantity : 0);
     }, 0);
-  }, [lines]);
+  }, [lines, products]);
 
   const onSelectCard = (id: string) => {
     setDefaultAddress(id);
@@ -107,7 +110,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex min-w-0 items-center gap-2">
                     <KindIcon kind={e.kind} />
-                    <span className="text-sm font-semibold text-[var(--bj-gold)]">{kindTitle(e)}</span>
+                    <span className="text-sm font-semibold text-[var(--bj-gold)]">{kindTitle(e, common.checkout)}</span>
                     {e.isDefault ? (
                       <span className="rounded bg-[var(--bj-gold-fill)]/25 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[var(--bj-gold)]">
                         {common.checkout.defaultBadge}
@@ -123,7 +126,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
                     <button
                       type="button"
                       className="rounded-full p-2 text-[var(--bj-gold)] hover:bg-stone-100 dark:hover:bg-zinc-800"
-                      aria-label={replaceCopy(common.aria.editAddressKind, { kind: kindTitle(e) })}
+                      aria-label={replaceCopy(common.aria.editAddressKind, { kind: kindTitle(e, common.checkout) })}
                       onClick={(ev) => {
                         ev.stopPropagation();
                         onEdit(e);
@@ -193,7 +196,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex min-w-0 items-center gap-2">
                         <KindIcon kind={e.kind} />
-                        <span className="text-sm font-semibold text-[var(--bj-gold)]">{kindTitle(e)}</span>
+                        <span className="text-sm font-semibold text-[var(--bj-gold)]">{kindTitle(e, common.checkout)}</span>
                         {e.isDefault ? (
                           <span className="rounded bg-[var(--bj-gold-fill)]/25 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[var(--bj-gold)]">
                             {common.checkout.defaultBadge}
@@ -209,7 +212,7 @@ export function SavedAddressesScreen({ entries, onRefresh, onAddNew, onEdit, onP
                         <button
                           type="button"
                           className="rounded-full p-1.5 text-[var(--bj-gold)] hover:bg-stone-100 dark:hover:bg-zinc-800"
-                          aria-label={replaceCopy(common.aria.editAddressKind, { kind: kindTitle(e) })}
+                          aria-label={replaceCopy(common.aria.editAddressKind, { kind: kindTitle(e, common.checkout) })}
                           onClick={(ev) => {
                             ev.stopPropagation();
                             onEdit(e);

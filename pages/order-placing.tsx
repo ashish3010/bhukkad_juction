@@ -1,8 +1,9 @@
 import dynamic from "next/dynamic";
 import { MainAppShell } from "@/features/layout/MainAppShell";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 
 function OrderPlacingLoading() {
+  const common = useCommon();
   const t = common.orderPlacing;
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-amber-50 from-0% via-[var(--bj-bg)] via-45% to-stone-100 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] dark:from-zinc-950 dark:via-[var(--bj-bg)] dark:to-zinc-950">

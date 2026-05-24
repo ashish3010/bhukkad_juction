@@ -4,7 +4,7 @@ import { AppLogo } from "@/features/layout/components/AppLogo";
 import { IconBag, IconGrid, IconHome, IconLeaf, IconReceipt, IconX } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
 import { useTheme } from "@/features/theme/theme-context";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 
 type Props = {
   open: boolean;
@@ -29,6 +29,7 @@ function isActiveItem(key: string, pathname: string, asPath: string): boolean {
 }
 
 export function NavDrawer({ open, onClose }: Props) {
+  const common = useCommon();
   const router = useRouter();
   const totalCount = useCartStore((s) => s.lines.reduce((sum, l) => sum + l.quantity, 0));
   const { pathname, asPath } = router;

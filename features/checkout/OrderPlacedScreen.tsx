@@ -13,12 +13,13 @@ import {
   IconMapPin,
   IconReceipt,
 } from "@/shared/components/icons";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 
 const card =
   "rounded-2xl border border-stone-200/90 bg-[var(--bj-card)] p-4 shadow-sm dark:border-zinc-800/90 dark:shadow-none";
 
 export function OrderPlacedScreen() {
+  const common = useCommon();
   const router = useRouter();
   const [snap, setSnap] = useState<OrderPlacedSnapshot | null>(null);
 

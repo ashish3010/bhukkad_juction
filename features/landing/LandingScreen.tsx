@@ -3,15 +3,17 @@ import Link from "next/link";
 import { BrandMark } from "@/features/landing/components/BrandMark";
 import { GetStartedButton } from "@/features/landing/components/GetStartedButton";
 import { LiveKitchenBadge } from "@/features/landing/components/LiveKitchenBadge";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 
 export function LandingScreen() {
+  const common = useCommon();
   const l = common.landing;
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col overflow-hidden bg-[var(--bj-bg)] text-stone-900 dark:text-zinc-100">
       <div className="relative h-[38vh] min-h-[200px] w-full shrink-0">
         <Image
-          src="/images/landing-hero.png"
+          src={resolveImageSrc("/images/landing-hero.png")}
           alt={l.heroImageAlt}
           fill
           priority

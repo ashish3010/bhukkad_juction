@@ -1,7 +1,10 @@
-/** Source of truth: `public/static/common.json` (also served at `/static/common.json`). Bundled at build time. */
+/**
+ * Bundled fallback: `public/static/common.json` (also at `/static/common.json`).
+ * UI copy loads remotely in the browser when `CommonCopyProvider` is used; this stays the offline fallback.
+ */
 import rawCommon from "../../public/static/common.json";
 
-export const common = rawCommon as CommonCopy;
+export const commonLocal = rawCommon as CommonCopy;
 
 export type CommonCopy = {
   site: {

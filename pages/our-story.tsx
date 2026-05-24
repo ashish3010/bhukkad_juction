@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { OurStoryScreen } from "@/features/story/OurStoryScreen";
 import { MainAppShell } from "@/features/layout/MainAppShell";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 
 export default function OurStoryPage() {
+  const common = useCommon();
   return (
     <MainAppShell>
       <Head>

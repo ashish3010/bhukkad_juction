@@ -6,10 +6,12 @@ import { PriceSummary } from "@/features/checkout/components/PriceSummary";
 import { SelectionList } from "@/features/checkout/components/SelectionList";
 import { useCart } from "@/features/cart/cart-store";
 import { IconArrowRight } from "@/shared/components/icons";
-import { common } from "@/shared/data/common";
-import { getProductById } from "@/shared/data/menu";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { getProductById, useMenuStore } from "@/shared/data/menu";
 
 export function OrderSummaryScreen() {
+  const common = useCommon();
+  const products = useMenuStore((s) => s.products);
   const { lines } = useCart();
 
   const total = useMemo(() => {
@@ -17,7 +19,7 @@ export function OrderSummaryScreen() {
       const p = getProductById(line.productId);
       return sum + (p ? p.price * line.quantity : 0);
     }, 0);
-  }, [lines]);
+  }, [lines, products]);
 
   return (
     <>

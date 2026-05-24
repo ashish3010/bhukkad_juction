@@ -3,7 +3,8 @@ import { memo, useCallback } from "react";
 import { Button } from "@/shared/components/ui/Button";
 import { IconMinus, IconPlus } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import { formatProductPrice } from "@/shared/data/menu";
 import type { Product } from "@/shared/types/food";
 
@@ -12,7 +13,7 @@ const stepBtn =
 
 type Props = {
   product: Product;
-  /** Desktop / alternate label for the primary add action (default: `common.productCard.addToCart`). */
+  /** Desktop / alternate label for the primary add action (default: add-to-cart copy from `useCommon()`). */
   ctaLabel?: string;
   /** Passed to `next/image` `sizes` for responsive loading. */
   imageSizes?: string;
@@ -23,6 +24,7 @@ export const ProductCard = memo(function ProductCard({
   ctaLabel,
   imageSizes,
 }: Props) {
+  const common = useCommon();
   const qty = useCartStore(
     (s) => s.lines.find((l) => l.productId === product.id)?.quantity ?? 0,
   );
@@ -45,7 +47,7 @@ export const ProductCard = memo(function ProductCard({
     <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200/80 dark:bg-zinc-900 dark:ring-zinc-800">
       <div className="relative aspect-square w-full">
         <Image
-          src={product.image}
+          src={resolveImageSrc(product.image)}
           alt={product.name}
           fill
           className="object-cover object-center"

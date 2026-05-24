@@ -1,4 +1,4 @@
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 import { IconPhone, IconPotSteam } from "@/shared/components/icons";
 
 type Props = {
@@ -7,6 +7,7 @@ type Props = {
 };
 
 export function AppHeaderTopContact({ className = "" }: Props) {
+  const common = useCommon();
   const h = common.headerTopBar;
 
   return (

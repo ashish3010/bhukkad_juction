@@ -3,8 +3,10 @@ import { memo, useCallback } from "react";
 import { Card } from "@/shared/components/ui/Card";
 import { IconMinus, IconPlus, IconTrash } from "@/shared/components/icons";
 import { useCartStore } from "@/features/cart/cart-store";
-import { common, replaceCopy } from "@/shared/data/common";
-import { formatProductPrice, getProductById } from "@/shared/data/menu";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { replaceCopy } from "@/shared/data/common";
+import { formatProductPrice, useMenuStore } from "@/shared/data/menu";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import type { CartLine, Product } from "@/shared/types/food";
 
 const stepBtn =
@@ -16,6 +18,7 @@ const deleteBtn =
 type LineRowProps = { line: CartLine; product: Product };
 
 const SelectionLineRow = memo(function SelectionLineRow({ line, product }: LineRowProps) {
+  const common = useCommon();
   const setLineQuantity = useCartStore((s) => s.setLineQuantity);
   const lineTotal = product.price * line.quantity;
 
@@ -34,7 +37,7 @@ const SelectionLineRow = memo(function SelectionLineRow({ line, product }: LineR
   return (
     <Card className="flex gap-3 p-3">
       <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl">
-        <Image src={product.image} alt="" fill className="object-cover object-center" sizes="64px" />
+        <Image src={resolveImageSrc(product.image)} alt="" fill className="object-cover object-center" sizes="64px" />
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <p className="font-semibold leading-snug text-stone-900 dark:text-zinc-100">{product.name}</p>
@@ -84,6 +87,8 @@ const SelectionLineRow = memo(function SelectionLineRow({ line, product }: LineR
 });
 
 export function SelectionList() {
+  const common = useCommon();
+  const products = useMenuStore((s) => s.products);
   const lines = useCartStore((s) => s.lines);
 
   if (lines.length === 0) {
@@ -102,7 +107,7 @@ export function SelectionList() {
       <h2 className="text-sm font-bold text-[var(--bj-gold)]">{common.cart.yourSelection}</h2>
       <div className="space-y-3">
         {lines.map((line) => {
-          const product = getProductById(line.productId);
+          const product = products.find((p) => p.id === line.productId);
           if (!product) return null;
           return <SelectionLineRow key={line.productId} line={line} product={product} />;
         })}

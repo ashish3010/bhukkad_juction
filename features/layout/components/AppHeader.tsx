@@ -6,10 +6,12 @@ import { AppHeaderTopContact } from "@/features/layout/components/AppHeaderTopCo
 import { AppLogo } from "@/features/layout/components/AppLogo";
 import { NavDrawer } from "@/features/layout/components/NavDrawer";
 import { useCartStore } from "@/features/cart/cart-store";
-import { common, replaceCopy } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { replaceCopy } from "@/shared/data/common";
 import { SITE_NAME } from "@/shared/site-meta";
 
 export function AppHeader() {
+  const common = useCommon();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const totalCount = useCartStore((s) => s.lines.reduce((sum, l) => sum + l.quantity, 0));

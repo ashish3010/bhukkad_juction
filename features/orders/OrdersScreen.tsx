@@ -6,8 +6,9 @@ import { useCartStore } from "@/features/cart/cart-store";
 import { DesktopOrdersDashboardView } from "@/features/orders/DesktopOrdersDashboardView";
 import { OrderItemsSummaryCollapsible } from "@/features/orders/components/OrderItemsSummaryCollapsible";
 import { readOrderHistory, type StoredOrder } from "@/features/orders/order-history-storage";
-import { getProductById } from "@/shared/data/menu";
-import { common } from "@/shared/data/common";
+import { getProductById, useMenuStore } from "@/shared/data/menu";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { resolveImageSrc } from "@/shared/resolve-image-src";
 import { IconReceipt } from "@/shared/components/icons";
 
 const card =
@@ -32,6 +33,8 @@ function lineSummary(order: StoredOrder): string {
 }
 
 export function OrdersScreen() {
+  const common = useCommon();
+  const products = useMenuStore((s) => s.products);
   const router = useRouter();
   const add = useCartStore((s) => s.add);
   const [orders, setOrders] = useState<StoredOrder[]>([]);
@@ -63,7 +66,7 @@ export function OrdersScreen() {
       }
       void router.push("/order-summary");
     },
-    [add, router],
+    [add, router, products],
   );
 
   return (
@@ -93,7 +96,7 @@ export function OrdersScreen() {
             ) : (
               <ul className="space-y-3">
                 {orders.map((order) => {
-                  const thumb = order.previewImage || FALLBACK_THUMB;
+                  const thumb = resolveImageSrc(order.previewImage || FALLBACK_THUMB);
                   return (
                     <li key={order.orderId}>
                       <div className={card}>

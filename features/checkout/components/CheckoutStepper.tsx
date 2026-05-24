@@ -1,5 +1,5 @@
 import { IconCheck } from "@/shared/components/icons";
-import { common } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
 
 export type CheckoutStep = 1 | 2;
 
@@ -46,6 +46,7 @@ function StepLabel({
 }
 
 export function CheckoutStepper({ current }: Props) {
+  const common = useCommon();
   const steps: { step: CheckoutStep; label: string }[] = [
     { step: 1, label: common.checkout.stepCart },
     { step: 2, label: common.checkout.stepDelivery },

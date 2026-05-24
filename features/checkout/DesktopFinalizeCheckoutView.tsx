@@ -18,7 +18,8 @@ import {
   IconWallet,
   IconWhatsApp,
 } from "@/shared/components/icons";
-import { common, replaceCopy } from "@/shared/data/common";
+import { useCommon } from "@/shared/data/common-copy-provider";
+import { replaceCopy } from "@/shared/data/common";
 import { SITE_NAME } from "@/shared/site-meta";
 import { useCartStore } from "@/features/cart/cart-store";
 
@@ -96,6 +97,7 @@ export function DesktopFinalizeCheckoutView({
   editCartHref = "/order-summary",
   hidePaymentAndCoupon = false,
 }: Props) {
+  const common = useCommon();
   const f = common.desktop.finalize;
   const c = common.checkout;
   const lineCount = useCartStore((s) => s.lines.length);
