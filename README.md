@@ -11,13 +11,20 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+Copy **`.env.example`** to **`.env.local`** when you need the flags documented there.
+
 ## Images & animations (CDN vs `public/`)
 
 `/images/…` and `/animation/…` resolve to **`{NEXT_PUBLIC_PRODUCTION_SITE_ORIGIN}/assets/images/…`** and **`…/assets/animations/…`** by default (override base with `NEXT_PUBLIC_IMAGE_ASSETS_BASE`).
 
 To use **`public/images`** (and local animation files) during **`next dev`** / localhost, set **`NEXT_PUBLIC_USE_LOCAL_PUBLIC_IMAGES=1`**.
 
-## Site JSON (`common.json` / `menu.json`) and DevTools Network
+## Site JSON (`common.json` / `menu.json`)
+
+- **`NEXT_PUBLIC_ENV_MODE=dev`** (or `development`): load copy/menu only from **`public/static/common.json`** and **`public/static/menu.json`**.
+- **Otherwise:** try **`/api/site-common`**, **`/api/site-menu`**, then upstream; if those fail, fall back to the same **`/static/*.json`** files.
+
+### DevTools Network
 
 Menu and copy JSON are loaded in **`pages/_app` → `getInitialProps`** (server on first paint, sometimes again on client navigations). Valid payloads are passed as **`__initialCommon`** and **`__initialMenu`** in `pageProps`, serialized into the HTML as part of **`__NEXT_DATA__`**.
 

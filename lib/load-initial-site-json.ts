@@ -2,7 +2,7 @@ import type { IncomingMessage } from "http";
 import { siteJsonUpstreamRevalidateSeconds } from "@/lib/site-asset-cache";
 import { fetchCommonJsonFromUpstream, fetchMenuJsonFromUpstream } from "@/lib/site-json-upstream-fetch";
 import type { CommonCopy } from "@/shared/data/common";
-import { isLocalPublicJsonMode, isLocalPublicJsonModeOnServer } from "@/shared/data/local-json-mode";
+import { isLocalPublicJsonMode } from "@/shared/data/local-json-mode";
 import {
   remoteCommonFetchUrlsAbsolute,
   remoteMenuFetchUrlsAbsolute,
@@ -60,12 +60,7 @@ async function loadCommonRemote(origin: string | null): Promise<CommonCopy | nul
     }
   }
   const upstream = await fetchCommonJsonFromUpstream();
-  if (isValidCommonPayload(upstream)) return upstream;
-  if (origin) {
-    const fallback = await fetchJson(`${origin}${STATIC_COMMON_URL}`);
-    return isValidCommonPayload(fallback) ? fallback : null;
-  }
-  return null;
+  return isValidCommonPayload(upstream) ? upstream : null;
 }
 
 async function loadMenuRemote(origin: string | null): Promise<SiteMenuPayload | null> {
@@ -76,17 +71,13 @@ async function loadMenuRemote(origin: string | null): Promise<SiteMenuPayload | 
     }
   }
   const upstream = await fetchMenuJsonFromUpstream();
-  if (isValidMenuPayload(upstream)) return upstream;
-  if (origin) {
-    const fallback = await fetchJson(`${origin}${STATIC_MENU_URL}`);
-    return isValidMenuPayload(fallback) ? fallback : null;
-  }
-  return null;
+  return isValidMenuPayload(upstream) ? upstream : null;
 }
 
 /**
  * Loads `common.json` + `menu.json` for `_app.getInitialProps` (server + client navigations).
- * Uses the same rules as the client providers: local public mode → `/static/*.json`, else API / upstream / static fallback.
+ * With **`NEXT_PUBLIC_ENV_MODE=dev`** (or `development`), uses `/static/*.json` only.
+ * Otherwise loads API/upstream first; if that fails, falls back to `/static/*.json`.
  *
  * On **first document load**, results are embedded in `__NEXT_DATA__` (not visible as separate JSON rows in Network).
  * Use the **document** response in DevTools or page source to inspect `__initialCommon` / `__initialMenu`.
@@ -95,16 +86,19 @@ export async function loadInitialSiteJson(req?: IncomingMessage): Promise<{
   common: CommonCopy | null;
   menu: SiteMenuPayload | null;
 }> {
-  const isServer = typeof window === "undefined";
-  const hostHeader = req?.headers?.host;
-  const local = isServer ? isLocalPublicJsonModeOnServer(hostHeader) : isLocalPublicJsonMode();
-  const origin = isServer ? requestOrigin(req) : window.location.origin;
+  const origin = typeof window === "undefined" ? requestOrigin(req) : window.location.origin;
 
-  if (local) {
+  if (isLocalPublicJsonMode()) {
     const [common, menu] = await Promise.all([loadCommonLocal(origin), loadMenuLocal(origin)]);
     return { common, menu };
   }
 
-  const [common, menu] = await Promise.all([loadCommonRemote(origin), loadMenuRemote(origin)]);
+  const [remoteCommon, remoteMenu] = await Promise.all([loadCommonRemote(origin), loadMenuRemote(origin)]);
+
+  const [common, menu] = await Promise.all([
+    remoteCommon ?? loadCommonLocal(origin),
+    remoteMenu ?? loadMenuLocal(origin),
+  ]);
+
   return { common, menu };
 }
