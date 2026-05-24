@@ -15,11 +15,9 @@ Copy **`.env.example`** to **`.env.local`** when you need the flags documented t
 
 ## Images & animations
 
-`/images/…` resolves to **`{NEXT_PUBLIC_IMAGE_ASSETS_SUFFIX}/images/…`** (and **`…/animations/…`** for `/animation/…`). Set the suffix to your CDN base URL or path prefix (no extra production-site base is applied in code). Use **`NEXT_PUBLIC_…`** so the client can build URLs.
+`/images/…` and `/animation/…` resolve to **`/cdn/assets/images/…`** and **`/cdn/assets/animations/…`**, which use the same **`/cdn/:path*`** rewrite as other blob files (see **`shared/image-assets-root.ts`** and **`next.config.ts`**). The public blob URL shape is **`https://…vercel-storage.com/assets/images/…`**.
 
-If the suffix is unset, images stay as same-origin **`/images/…`**.
-
-To use **`public/images`** during local JSON dev mode, set **`NEXT_PUBLIC_USE_LOCAL_PUBLIC_IMAGES=1`**.
+Edit **`VERCEL_BLOB_PUBLIC_ORIGIN`** / **`IMAGE_ASSETS_ROOT`** in **`shared/image-assets-root.ts`** if the bucket or path prefix changes.
 
 ## Site JSON (`common.json` / `menu.json`)
 

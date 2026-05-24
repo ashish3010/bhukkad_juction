@@ -3,18 +3,18 @@ import {
   nextImageMinimumCacheTtlSeconds,
   staticSiteJsonCacheControl,
 } from "./lib/site-asset-cache";
+import { IMAGE_ASSETS_ROOT, VERCEL_BLOB_PUBLIC_ORIGIN } from "./shared/image-assets-root";
 
 const productionSite =
   process.env.NEXT_PUBLIC_PRODUCTION_SITE_ORIGIN?.replace(/\/$/, "") ||
   "https://thebhukkadjunction.com";
 
-/** `next/image` allowlist: host/path parsed from **`NEXT_PUBLIC_IMAGE_ASSETS_SUFFIX`** when it is an absolute URL. */
+/** `next/image` allowlist only when `IMAGE_ASSETS_ROOT` is an absolute URL (blob uses same-origin `/cdn/…`). */
 function imageAssetsRemotePattern():
   | { protocol: "http" | "https"; hostname: string; pathname: string }
   | null {
-  const raw = process.env.NEXT_PUBLIC_IMAGE_ASSETS_SUFFIX?.trim() || "";
-  if (!raw || /^[?&]/.test(raw) || raw.includes("=")) return null;
-  if (!/^https?:\/\//i.test(raw)) return null;
+  const raw = IMAGE_ASSETS_ROOT.trim();
+  if (!raw.startsWith("http")) return null;
   try {
     const url = new URL(raw);
     const pathname = url.pathname.replace(/\/$/, "") || "";
@@ -35,8 +35,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/cdn/:path*",
-        destination:
-          "https://hmwj9hql4qgiypy7.public.blob.vercel-storage.com/:path*",
+        destination: `${VERCEL_BLOB_PUBLIC_ORIGIN}/:path*`,
       },
       {
         source: "/site-copy/cdn/common.json",

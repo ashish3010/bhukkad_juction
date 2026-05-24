@@ -23,7 +23,7 @@ export function getCachedLogoSrcForUi(): string {
   return cachedLogoSrcUi;
 }
 
-/** Logo URL for favicon / JSON-LD (CDN when `preferRemoteAssets` applies). */
+/** Logo URL for favicon / JSON-LD (same resolved CDN path as UI). */
 let cachedLogoSrcMeta: string | null = null;
 export function getCachedLogoSrcForMeta(): string {
   if (cachedLogoSrcMeta == null) {
