@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { resolveImageSrc } from "@/shared/resolve-image-src";
-import { LOGO_PATH, SITE_NAME } from "@/shared/site-meta";
+import { getCachedLogoSrcForUi, SITE_NAME } from "@/shared/site-meta";
 
 type Props = {
   /** Width in CSS pixels; height matches for square frame (image uses object-contain). */
@@ -25,7 +24,7 @@ export function AppLogo({
 }: Props) {
   const image = (
     <Image
-      src={resolveImageSrc(LOGO_PATH)}
+      src={getCachedLogoSrcForUi()}
       alt={decorative ? "" : `${SITE_NAME} logo`}
       width={width}
       height={width}

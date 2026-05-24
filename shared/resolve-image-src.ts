@@ -1,10 +1,19 @@
 import { isLocalPublicJsonMode } from "@/shared/data/local-json-mode";
+import { PRODUCTION_SITE_ORIGIN } from "@/shared/site-remote";
 
+/**
+ * Assets root (no trailing slash): `{origin}/assets`, e.g. `https://thebhukkadjunction.com/assets`.
+ * Override with `NEXT_PUBLIC_IMAGE_ASSETS_BASE` or `NEXT_PUBLIC_ASSETS_IMAGES_BASE`.
+ * If unset, defaults to `{NEXT_PUBLIC_PRODUCTION_SITE_ORIGIN}/assets` (see `site-remote.ts`).
+ *
+ * **Local `public/images` in dev:** set `NEXT_PUBLIC_USE_LOCAL_PUBLIC_IMAGES=1` so `/images/…`
+ * stays on the app origin when local public JSON mode is active (`next dev`, localhost, etc.).
+ */
 export function getImageAssetsBaseUrl(): string {
   const raw =
     process.env.NEXT_PUBLIC_IMAGE_ASSETS_BASE?.trim() ||
     process.env.NEXT_PUBLIC_ASSETS_IMAGES_BASE?.trim() ||
-    "";
+    `${PRODUCTION_SITE_ORIGIN}/assets`;
   let root = raw.replace(/\/+$/, "");
   if (/\/images$/i.test(root)) {
     root = root.slice(0, -"/images".length).replace(/\/+$/, "");
@@ -13,6 +22,12 @@ export function getImageAssetsBaseUrl(): string {
     root = root.slice(0, -"/animations".length).replace(/\/+$/, "");
   }
   return root;
+}
+
+function localPublicImageFilesEnabled(): boolean {
+  return (
+    isLocalPublicJsonMode() && process.env.NEXT_PUBLIC_USE_LOCAL_PUBLIC_IMAGES === "1"
+  );
 }
 
 export function imageAssetsSuffix(): string {
@@ -46,9 +61,6 @@ function remainderAfterAssetPrefix(
 
 function joinRemotePath(relativeAfterImages: string): string {
   const root = getImageAssetsBaseUrl();
-  if (!root) {
-    return `/images/${relativeAfterImages}`;
-  }
   const suf = imageAssetsSuffix();
   const underImages = `${root}/images/${relativeAfterImages}`;
   if (!suf) return underImages;
@@ -61,9 +73,6 @@ function joinRemotePath(relativeAfterImages: string): string {
 
 function joinRemoteAnimationPath(relativeAfterAnimation: string): string {
   const root = getImageAssetsBaseUrl();
-  if (!root) {
-    return `/animation/${relativeAfterAnimation}`;
-  }
   const suf = imageAssetsSuffix();
   const underAnimations = `${root}/animations/${relativeAfterAnimation}`;
   if (!suf) return underAnimations;
@@ -80,9 +89,8 @@ export type ResolveImageSrcOptions = {
 };
 
 /**
- * Maps `/images/foo.png` → `{root}/images/foo.png` (see `getImageAssetsBaseUrl`), with optional suffix envs.
- * If the assets root env is unset, `/images/…` stays on the app origin (except query suffix in local mode).
- * Absolute `http(s)` URLs only get a **query-style** suffix when configured.
+ * Maps `/images/foo.png` → `{assetsRoot}/images/foo.png` (default host `thebhukkadjunction.com/assets`).
+ * In local public mode, use `NEXT_PUBLIC_USE_LOCAL_PUBLIC_IMAGES=1` to keep `/images/…` on this app (e.g. `public/images`).
  */
 export function resolveImageSrc(
   src: string,
@@ -94,8 +102,9 @@ export function resolveImageSrc(
     if (!suf || !isQueryStyleSuffix(suf)) return src;
     return appendQueryString(src, suf);
   }
-  const local = isLocalPublicJsonMode() && !opts?.preferRemoteAssets;
-  if (local) {
+  const localUi =
+    localPublicImageFilesEnabled() && !opts?.preferRemoteAssets;
+  if (localUi) {
     if (!src.startsWith("/images/")) return src;
     const rest = remainderAfterAssetPrefix("/images/", src);
     if (/^https?:\/\//i.test(rest)) {
@@ -116,8 +125,7 @@ export function resolveImageSrc(
 }
 
 /**
- * Maps `/animation/foo.lottie` → `{root}/animations/foo.lottie` (same assets root as images).
- * Browser caching follows your CDN / origin `Cache-Control` on that URL — set long `max-age` on `.lottie` at the host.
+ * Maps `/animation/foo.lottie` → `{assetsRoot}/animations/...`. Same local override as images.
  */
 export function resolveAnimationSrc(
   src: string,
@@ -129,8 +137,9 @@ export function resolveAnimationSrc(
     if (!suf || !isQueryStyleSuffix(suf)) return src;
     return appendQueryString(src, suf);
   }
-  const local = isLocalPublicJsonMode() && !opts?.preferRemoteAssets;
-  if (local) {
+  const localUi =
+    localPublicImageFilesEnabled() && !opts?.preferRemoteAssets;
+  if (localUi) {
     if (!src.startsWith("/animation/")) return src;
     const rest = remainderAfterAssetPrefix("/animation/", src);
     if (/^https?:\/\//i.test(rest)) {

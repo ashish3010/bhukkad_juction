@@ -8,14 +8,14 @@ const productionSite =
   process.env.NEXT_PUBLIC_PRODUCTION_SITE_ORIGIN?.replace(/\/$/, "") ||
   "https://thebhukkadjunction.com";
 
-/** `next/image` remote host/path — only from image env (same keys as `resolveImageSrc`). */
+/** `next/image` remote host/path — same default as `resolveImageSrc` (`{productionSite}/assets`). */
 function imageAssetsRemotePattern():
   | { protocol: "http" | "https"; hostname: string; pathname: string }
   | null {
   const raw =
     process.env.NEXT_PUBLIC_IMAGE_ASSETS_BASE?.trim() ||
-    process.env.NEXT_PUBLIC_ASSETS_IMAGES_BASE?.trim();
-  if (!raw) return null;
+    process.env.NEXT_PUBLIC_ASSETS_IMAGES_BASE?.trim() ||
+    `${productionSite}/assets`;
   try {
     const url = new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`);
     const pathname = url.pathname.replace(/\/$/, "") || "";
@@ -57,10 +57,15 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     const longLocalAssets = "public, max-age=86400, stale-while-revalidate=604800";
+    const logoImmutable = "public, max-age=31536000, immutable";
     return [
       {
         source: "/static/:path*",
         headers: [{ key: "Cache-Control", value: staticSiteJsonCacheControl() }],
+      },
+      {
+        source: "/images/logo.png",
+        headers: [{ key: "Cache-Control", value: logoImmutable }],
       },
       {
         source: "/images/:path*",

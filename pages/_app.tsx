@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import { Poppins } from "next/font/google";
 import { THEME_STORAGE_KEY, ThemeProvider } from "@/features/theme/theme-context";
 import {
-  LOGO_PATH,
   SITE_DESCRIPTION,
   SITE_KEYWORDS,
   SITE_NAME,
   SITE_TITLE,
   absoluteSiteUrl,
   restaurantJsonLd,
+  getCachedLogoSrcForMeta,
 } from "@/shared/site-meta";
 import { resolveImageSrc } from "@/shared/resolve-image-src";
 import { VercelAnalytics } from "@/features/analytics/VercelAnalytics";
@@ -52,7 +52,7 @@ function LcpHeroPreload() {
 function BhukkadApp({ Component, pageProps }: AppProps) {
   const { __initialCommon, __initialMenu, ...componentPageProps } = pageProps as PagePropsWithSiteJson;
   const canonical = absoluteSiteUrl("/");
-  const ogImage = absoluteSiteUrl(resolveImageSrc(LOGO_PATH, { preferRemoteAssets: true }));
+  const ogImage = absoluteSiteUrl(getCachedLogoSrcForMeta());
 
   return (
     <>
@@ -100,6 +100,7 @@ function BhukkadApp({ Component, pageProps }: AppProps) {
 }
 
 BhukkadApp.getInitialProps = async (appContext: AppContext) => {
+  /** JSON is merged into pageProps → serialized in HTML `__NEXT_DATA__` (no separate Network row on first load). */
   const appProps = await NextApp.getInitialProps(appContext);
   const { common, menu } = await loadInitialSiteJson(appContext.ctx.req);
   return {

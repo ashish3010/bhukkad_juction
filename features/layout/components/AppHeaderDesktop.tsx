@@ -31,7 +31,7 @@ export function AppHeaderDesktop() {
               className="flex min-w-0 shrink-0 items-center gap-2.5"
               aria-label={replaceCopy(common.aria.homeLink, { siteName: SITE_NAME })}
             >
-              <AppLogo width={40} decorative priority circleCrop />
+              <AppLogo width={40} decorative circleCrop />
               <span className="truncate text-lg font-bold tracking-tight text-[var(--bj-gold)]">{SITE_NAME}</span>
             </Link>
 

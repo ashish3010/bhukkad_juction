@@ -14,6 +14,24 @@ export const SITE_KEYWORDS = commonLocal.site.keywords;
 /** Brand mark under `public/images/` (served as `/images/...`). */
 export const LOGO_PATH = "/images/logo.png";
 
+/** One resolved URL per payload for `<Image />` / header (avoids repeated `resolveImageSrc` work). */
+let cachedLogoSrcUi: string | null = null;
+export function getCachedLogoSrcForUi(): string {
+  if (cachedLogoSrcUi == null) {
+    cachedLogoSrcUi = resolveImageSrc(LOGO_PATH);
+  }
+  return cachedLogoSrcUi;
+}
+
+/** Logo URL for favicon / JSON-LD (CDN when `preferRemoteAssets` applies). */
+let cachedLogoSrcMeta: string | null = null;
+export function getCachedLogoSrcForMeta(): string {
+  if (cachedLogoSrcMeta == null) {
+    cachedLogoSrcMeta = resolveImageSrc(LOGO_PATH, { preferRemoteAssets: true });
+  }
+  return cachedLogoSrcMeta;
+}
+
 /**
  * Opens this listing in the Google Maps app / full site (photos, hours, reviews, etc.).
  * Prefer your official short link; override with `NEXT_PUBLIC_GOOGLE_MAPS_PLACE_URL`.
@@ -46,7 +64,7 @@ export function absoluteSiteUrl(path: string): string | undefined {
 
 export function restaurantJsonLd(): string {
   const url = absoluteSiteUrl("/");
-  const logoResolved = resolveImageSrc(LOGO_PATH, { preferRemoteAssets: true });
+  const logoResolved = getCachedLogoSrcForMeta();
   const imageAbs = /^https?:\/\//i.test(logoResolved) ? logoResolved : absoluteSiteUrl(logoResolved);
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
