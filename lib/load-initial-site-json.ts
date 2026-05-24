@@ -74,14 +74,7 @@ async function loadMenuRemote(origin: string | null): Promise<SiteMenuPayload | 
   return isValidMenuPayload(upstream) ? upstream : null;
 }
 
-/**
- * Loads `common.json` + `menu.json` for `_app.getInitialProps` (server + client navigations).
- * With **`NEXT_PUBLIC_ENV_MODE=dev`** (or `development`), uses `/static/*.json` only.
- * Otherwise loads API/upstream first; if that fails, falls back to `/static/*.json`.
- *
- * On **first document load**, results are embedded in `__NEXT_DATA__` (not visible as separate JSON rows in Network).
- * Use the **document** response in DevTools or page source to inspect `__initialCommon` / `__initialMenu`.
- */
+/** Used from `_app.getInitialProps` in the browser only; SSR passes `null` and providers fetch. */
 export async function loadInitialSiteJson(req?: IncomingMessage): Promise<{
   common: CommonCopy | null;
   menu: SiteMenuPayload | null;

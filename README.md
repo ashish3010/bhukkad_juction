@@ -26,19 +26,13 @@ To use **`public/images`** (and local animation files) during **`next dev`** / l
 
 ### DevTools Network
 
-Menu and copy JSON are loaded in **`pages/_app` → `getInitialProps`** (server on first paint, sometimes again on client navigations). Valid payloads are passed as **`__initialCommon`** and **`__initialMenu`** in `pageProps`, serialized into the HTML as part of **`__NEXT_DATA__`**.
+Copy and menu JSON are **not** loaded during SSR. After the first paint, **`CommonCopyProvider`** and **`MenuDataProvider`** fetch **`/static/*.json`** or API URLs in **`useEffect`**.
 
-So on a **full page load** you often **will not** see separate `fetch` / XHR rows for `site-common`, `site-menu`, or `/static/*.json`, because the browser did not request those URLs itself—the data arrived with the **document**.
+On **client-side** navigations, **`_app` → `getInitialProps`** may run in the browser and call **`loadInitialSiteJson`**, which can show **`site-common`**, **`site-menu`**, or **`/static/*.json`** in Network.
 
-**How to inspect the JSON**
+**`__NEXT_DATA__`**
 
-1. **Network** → click the **first** row for your page (type **document** / the HTML URL) → **Response** (or **Preview**) → search for `__initialCommon` or `__initialMenu`.
-2. Or **View Page Source** (⌥⌘U / Ctrl+U) and search for `__NEXT_DATA__`.
-
-**When you *will* see JSON in Network**
-
-- **Client-side** route changes: `getInitialProps` can run in the browser and `loadInitialSiteJson` may call `/api/site-common`, `/api/site-menu`, or `/static/*.json`—filter by **Fetch/XHR** or search `site-menu`, `common`, `static`.
-- If SSR returned **null** for one payload, the matching **provider** falls back to a client `fetch`, which then shows in Network.
+- **`__initialCommon`** / **`__initialMenu`** are **`null`** on the HTML from SSR; populated only after a client **`getInitialProps`** run (e.g. in-app navigation).
 
 ## Scripts
 

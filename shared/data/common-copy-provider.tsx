@@ -16,7 +16,7 @@ export function CommonCopyProvider({
   initialCommon,
 }: {
   children: ReactNode;
-  /** From `_app.getInitialProps` / SSR; when valid, skips client refetch. */
+  /** From `_app.getInitialProps` on client navigations only; when valid, skips client refetch. */
   initialCommon?: CommonCopy | null;
 }) {
   const ssrCommon = initialCommon != null && isValidCommonPayload(initialCommon) ? initialCommon : null;

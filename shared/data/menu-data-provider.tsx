@@ -14,7 +14,7 @@ export function MenuDataProvider({
   initialMenu,
 }: {
   children: ReactNode;
-  /** From `_app.getInitialProps` / SSR; when valid, hydrates the store and skips client refetch. */
+  /** From `_app.getInitialProps` on client navigations only; when valid, hydrates the store and skips client refetch. */
   initialMenu?: SiteMenuPayload | null;
 }) {
   const hasSsrMenu = initialMenu != null && isValidMenuPayload(initialMenu);

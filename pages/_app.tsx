@@ -100,9 +100,12 @@ function BhukkadApp({ Component, pageProps }: AppProps) {
 }
 
 BhukkadApp.getInitialProps = async (appContext: AppContext) => {
-  /** JSON is merged into pageProps → serialized in HTML `__NEXT_DATA__` (no separate Network row on first load). */
   const appProps = await NextApp.getInitialProps(appContext);
-  const { common, menu } = await loadInitialSiteJson(appContext.ctx.req);
+  /** Site JSON is not fetched during SSR; `CommonCopyProvider` / `MenuDataProvider` load on the client. */
+  const { common, menu } =
+    typeof window === "undefined"
+      ? { common: null as CommonCopy | null, menu: null as SiteMenuPayload | null }
+      : await loadInitialSiteJson(appContext.ctx.req);
   return {
     ...appProps,
     pageProps: {
