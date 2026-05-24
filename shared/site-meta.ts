@@ -27,7 +27,7 @@ export function getCachedLogoSrcForUi(): string {
 let cachedLogoSrcMeta: string | null = null;
 export function getCachedLogoSrcForMeta(): string {
   if (cachedLogoSrcMeta == null) {
-    cachedLogoSrcMeta = resolveImageSrc(LOGO_PATH, { preferRemoteAssets: true });
+    cachedLogoSrcMeta = resolveImageSrc(LOGO_PATH);
   }
   return cachedLogoSrcMeta;
 }
@@ -56,7 +56,9 @@ export function absoluteSiteUrl(path: string): string | undefined {
   if (/^https?:\/\//i.test(path)) return path;
   const base =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    (process.env.NODE_ENV === "development" ? PRODUCTION_SITE_ORIGIN : undefined);
+    (process.env.NODE_ENV === "development"
+      ? PRODUCTION_SITE_ORIGIN
+      : undefined);
   if (!base) return undefined;
   const p = path.startsWith("/") ? path : `/${path}`;
   return `${base}${p}`;
@@ -65,7 +67,9 @@ export function absoluteSiteUrl(path: string): string | undefined {
 export function restaurantJsonLd(): string {
   const url = absoluteSiteUrl("/");
   const logoResolved = getCachedLogoSrcForMeta();
-  const imageAbs = /^https?:\/\//i.test(logoResolved) ? logoResolved : absoluteSiteUrl(logoResolved);
+  const imageAbs = /^https?:\/\//i.test(logoResolved)
+    ? logoResolved
+    : absoluteSiteUrl(logoResolved);
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
